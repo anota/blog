@@ -91,7 +91,7 @@ function resetView()
 	};
 }
 //ajax请求服务器数据
-ajax('js/data.js',function(str){
+ajax('{{site.baseurl}}/js/post/2013-09-13/data.js',function(str){
 	var json = eval("("+str+")");
 	jsonList = json.list;
 	wipe = wipefn;
