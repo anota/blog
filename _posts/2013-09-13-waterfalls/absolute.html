@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+* {
+  margin:0;
+  padding:0;
+}
+body {
+  background:#000;
+  color:#ccc;
+  line-height:1.5;
+  font-size:14px;
+}
+li {
+  list-style:none;
+  padding:10px;
+ -webkit-transition: all .7s ease-out .1s;
+ -moz-transition: all .7s ease-out;
+ -o-transition: all .7s ease-out .1s;
+ transition: all .7s ease-out .1s;
+  position:absolute;
+  border:1px solid #000;
+  width:200px;
+}
+li:hover {
+  border:1px solid #999;
+}
+p {
+  border-bottom:1px dashed #666;
+  text-align:center;
+  padding:20px 0;
+  margin:0 30px;
+}
+#boxes {
+  margin:20px auto;
+  position:relative;
+}
+img {
+  width:100%;
+}
+</style>
+</head>
+<body>
+<div id="boxes">
+  <ul>
+    <li>
+      <img src="images/mod (1).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (2).jpg" />
+      <p>Hello,I am a Box,This why part!</p>
+    </li>
+    <li>
+      <img src="images/mod (3).jpg" />
+      <p>Hello,I am a Box,This why part!</p>
+    </li>
+    <li>
+      <img src="images/mod (11).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (4).jpg" />
+      <p>Hello,I am a Box!,This why part</p>
+    </li>
+    <li>
+      <img src="images/mod (5).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (10).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (12).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (8).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (9).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (13).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (12).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (8).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (9).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (13).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (14).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (15).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (4).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (10).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (12).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (10).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (12).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="images/mod (7).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+  </ul>
+</div>
+</body>
+<script type="text/javascript" src="new_ajax.js"></script>
+<script type="text/javascript">
+/*
+ * weibo:@anota@ju
+ * 实现原理：
+ *  1.获取可视区域宽度
+ *  2.计算瀑布流的列数（可视区域宽度/列数宽度）
+ *  3.如果每列排满后还有空隙，得到空隙（把这些剩余的空隙平均分到每列得到铺满的效果）
+ *  4.按顺序先排满第一列
+ *  5.然后通过第一列得到每个列数的高度数组（用于保存现在瀑布流列现在每一列的高度是多少，通过这个高度可以设置后面添加需要的绝对定位top值）。
+ *  6.当有元素添加的时候，重新赋值最小高度列的值；
+ */
+var aLi = document.getElementsByTagName("li");
+var aP = document.getElementsByTagName("p");
+var aImg = document.getElementsByTagName("img");
+var oUl = document.getElementsByTagName("ul")[0];
+var iMargin = 10;
+var iPadding = 20;
+var iBorder = 2;
+var iList = 0;
+var iJonsLen = 1;
+var iCellsWidth = aLi[0].offsetWidth + iMargin;
+//排版部分
+function waterfall()
+{
+	var iWinWidth = document.documentElement.clientWidth-12;
+	iWinHeight = document.documentElement.clientHeight;
+	aHeight = [];
+	var iNum = Math.floor(iWinWidth/iCellsWidth) || 0;
+	var iSurplus = iWinWidth - iNum*iCellsWidth;//剩余的宽度下面为重新设置li的宽度
+	aLiWidth = Math.floor(iCellsWidth + iSurplus/iNum); 
+	for(var i=0;i<aLi.length+1;i++)
+	{
+		aLi[i].style.width = aLiWidth - iMargin -iPadding -iBorder + "px";
+		aImg[i].style.width = aLiWidth - iMargin -iPadding -iBorder + "px"
+		aLiHeight = aLi[i].offsetHeight;
+		//console.log(aLiHeight)
+		if(i<iNum){
+			aHeight[i] = aLiHeight;
+			aLi[i].style.left = i*aLiWidth +5 +"px";
+			aLi[i].style.top = 0;
+			//console.log(aHeight[i])
+		}else
+		{
+			minHeight = Math.min.apply(window,aHeight);
+			minKey = getArryKey(minHeight,aHeight);
+			aHeight[minKey] += aLiHeight + iMargin;
+			aLi[i].style.left = minKey*aLiWidth +5 +"px";
+			aLi[i].style.top = minHeight + iMargin + 'px';			
+		}
+		//aP[i].innerHTML = "编号:" + i +"高度:"+ aLiHeight;		
+	};
+};
+
+//ajax请求部分 看的时候跳过。
+window.onscroll = function()
+{
+	var iScrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+	var minHeight = Math.min.apply(window,aHeight);
+	if(iScrollTop + iWinHeight > minHeight && iList < iJonsLen)
+	{
+		ajax('position_data.js',function(str){
+			var json = eval("("+str+")");//获取json
+			iJonsLen = json.list.length;
+			for(var i =0;i<json.list[iList].src.length;i++)
+			{
+				minHeight = Math.min.apply(window,aHeight);
+				minKey = getArryKey(minHeight,aHeight);
+				var oLi = document.createElement("li");//各种创建
+				var oImg = document.createElement("img");
+				var oP = document.createElement("p");
+				oImg.src = json.list[iList].src[i];
+				oP.innerHTML = json.list[iList].title[i]+"这是第"+iList;
+				oLi.style.top = minHeight + iMargin + 'px';			
+				oLi.appendChild(oImg);
+				oLi.appendChild(oP);			
+				oUl.appendChild(oLi);
+			}
+			iList++;//接下去的数组
+		})
+	}
+	waterfall();//每次滚动执行瀑布流
+};
+
+
+//获取字符在json数组中的位置
+function getArryKey(cell,arry)
+{
+	for(key in arry)
+	{
+		if(arry[key] == cell)
+		{
+			return key;
+		};
+	}
+}
+window.onload = window.onresize = function(){
+	waterfall();
+};
+</script>
+</html>
