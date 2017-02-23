@@ -1,0 +1,202 @@
+---
+layout: demo
+title: 手机：图片查看器
+---
+<style>
+div, body, ul, li {
+  margin:0;
+  padding:0;
+}
+body{
+  background:#000;
+}
+ul, li {
+  list-style:none;
+}
+img{
+  border:none;
+  vertical-align:middle;
+}
+#picList{
+  width:100%;
+  overflow:hidden;
+  position:relative;
+}
+#wrapper li {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align:center;
+  display:-webkit-box;
+  -webkit-box-pack:center;
+  -webkit-box-align:center;
+}
+#wrapper img{
+  max-height:100%;
+}
+</style>
+</head>
+<body>
+<div id="picList">
+<ul id="wrapper">
+  <li><img src="{{ site.baseurl }}/images/post/2013-09-13/mod (1).jpg"></li>
+  <li><img src="{{ site.baseurl }}/images/post/2013-09-13/mod (2).jpg"></li>
+  <li><img src="{{ site.baseurl }}/images/post/2013-09-13/mod (3).jpg"></li>
+</ul>
+</div>
+</body>
+<script src="{{site.baseurl}}/js/new_ajax.js"></script>
+<script type="text/javascript">
+/*
+ * weibo:@anota@ju
+ * 实现原理：
+ *  1.把图片分成三列
+ *  2.滑动的时候切换三列动画
+ *  3.滑到左边，把之前最左边的图片删除，然后在右边插入新的图片
+ *  4.滑到最右边，把之前右边的图片删除，然后在左边插入新的图片；
+ */
+var oWrap = document.getElementById("wrapper");
+var aLi = oWrap.getElementsByTagName("li");
+var aImg = oWrap.getElementsByTagName("img");
+var index = 0;
+window.onload = window.onresize = resetView;
+//这个 当页面加载的时候你要重置页面上的各种啊！
+function resetView()
+{
+	winHeight = document.documentElement.clientHeight;
+	winWidth = document.documentElement.clientWidth;
+	winScale = winWidth/winHeight;
+	oWrap.style.height = winHeight + 'px';
+	aLi[0].style.webkitTransform="translate3d(-100%, 0px, 0px)";
+	aLi[1].style.webkitTransform="translate3d(0%, 0px, 0px)";
+	aLi[2].style.webkitTransform="translate3d(100%, 0px, 0px)";
+	for(var i =0;i<aImg.length;i++)
+	{
+		aLi[i].style.webkitTransition="0ms";
+		(function(i){
+			var oNewImg = new Image;
+			oNewImg.onload = function()
+			{
+				var imgScale = this.width/this.height;
+				if(winScale>imgScale)
+				{
+					aImg[i].height = winHeight;
+				}else
+				{
+					aImg[i].width = winWidth;
+				};
+			}
+			oNewImg.src = aImg[i].src;
+		})(i)
+	};
+}
+//ajax请求服务器数据
+ajax('js/data.js',function(str){
+	var json = eval("("+str+")");
+	jsonList = json.list;
+	wipe = wipefn;
+})
+//这个不就是手势向右走向左走要做什么的内容嘛？
+var wipefn = {
+	wipeLeft:function(){
+		document.title = '你滑的是左边';
+		if(index+2 != jsonList.length)
+		{
+			index++;
+			aLi[1].style.webkitTransition = '300ms';
+			aLi[2].style.webkitTransition = '300ms';
+			aLi[1].style.webkitTransform="translate3d(-100%, 0px, 0px)";
+			aLi[2].style.webkitTransform="translate3d(0%, 0px, 0px)";
+			oWrap.removeChild(aLi[0]);
+			oImg = document.createElement("img");
+			oLi = document.createElement("li");
+			oImg.src = jsonList[index + 2] || "{{ site.baseurl }}/images/post/2013-09-13/mod (1).jpg";
+			var oNewImg = new Image;
+			oNewImg.src = oImg.src;
+			//设置图片的宽高
+			oNewImg.onload = function()
+			{
+				var imgScale = this.width/this.height;
+				if(winScale>imgScale)
+				{
+					oImg.height = winHeight;
+					//oImg.width = winHeight/imgScale;
+				}else
+				{
+					oImg.width = winWidth;
+					//oImg.height = winWidth/imgScale;
+				};
+				oLi.style.webkitTansition = '0ms';
+				oLi.style.webkitTransform = 'translate3D(100%,0,0)';
+				oLi.appendChild(oImg);
+				oWrap.appendChild(oLi);
+			};
+		}
+	},
+	wipeRight:function(){
+		document.title = '你滑的是右边';
+		//如果左边还有数据
+		if(index!= -1){
+			index--;
+			aLi[1].style.webkitTransition = '300ms';
+			aLi[0].style.webkitTransition = '300ms';
+			aLi[1].style.webkitTransform="translate3d(100%, 0px, 0px)";
+			aLi[0].style.webkitTransform="translate3d(0%, 0px, 0px)";
+			oWrap.removeChild(aLi[2]);
+			oImg = document.createElement("img");
+			oLi = document.createElement("li");
+			oImg.src = jsonList[index] || "{{ site.baseurl }}/images/post/2013-09-13/mod (1).jpg";
+			var oNewImg = new Image;
+			oNewImg.src = oImg.src;
+			//设置图片的宽高
+			oNewImg.onload = function()
+			{
+				var imgScale = this.width/this.height;
+				if(winScale>imgScale)
+				{
+					oImg.height = winHeight;
+					//oImg.width = winHeight/imgScale;
+				}else
+				{
+					oImg.width = winWidth;
+					//oImg.height = winWidth/imgScale;
+				};
+				oLi.style.webkitTansition = '0ms';
+				oLi.style.webkitTransform = 'translate3D(-100%,0,0)';
+				oLi.appendChild(oImg);
+				oWrap.insertBefore(oLi,aLi[0]);	
+			}		
+		}
+	}
+}
+//这完全手势的函数嘛
+function touchwipe(obj)
+{
+	var startX = null;
+	var startY = null;
+	obj.addEventListener("touchstart",onTouchStart,false);
+	function onTouchStart(e)
+	{
+		startX = e.touches[0].pageX;
+		document.addEventListener("touchmove",onTouchMove,false);
+	};
+	function onTouchMove(e)
+	{
+		e.preventDefault();
+		var disX = startX - e.touches[0].pageX;
+		if(Math.abs(disX) >= 20)
+		{
+			startX = null;
+			document.removeEventListener('touchmove',onTouchMove,false);
+			if(disX>0)
+			{
+				wipe.wipeLeft();
+			}else{
+				wipe.wipeRight();
+			}
+		};
+	};
+};
+//执行吧 滑动交互的孩子
+touchwipe(document);
+</script>
