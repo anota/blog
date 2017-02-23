@@ -1,0 +1,167 @@
+---
+title: 发微博效果
+---
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+* {margin:0; padding:0;}
+body{ font-size:12px; background:#000; color:#ccc;}
+#ul1 {width:300px; height:300px; border:1px solid #ccc; margin-top:50px;}
+#ul1 div {list-style:none; border-bottom:1px dashed #999; padding:2px; overflow:hidden; filter:alpha(opacity:0); opacity:0;}
+input{ width:100px; line-height:20px; height:20px; background:none; border:1px solid #ccc; color:#ccc;}
+.dis{ background:#666;}
+#content{ width:320px; margin:0 auto;}
+p{ line-height:80px;}
+textarea{ margin:0px auto 20px; width:318px; background:none; border:1px solid #ccc; color:#ccc; display:block; height:100px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<div id="content">
+	<p>阿娇微博公开与韩国男恋情，称会狠狠幸福下去　24时热博</p>
+    <textarea id="txt1" rows="10" cols="40"></textarea>
+    <input class="dis" id="btn1" type="button" value="发布" />
+    <div id="ul1">
+    </div>
+</div>
+</body>
+<script>
+function getStyle(obj,attr)
+{
+	return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj,false)[attr];
+};
+function startMove(obj,json,fn)
+{
+	clearInterval(obj.timer)
+	obj.timer = setInterval(function(){
+		var bStop = true;
+		for(attr in json)
+		{
+			iCur = attr=="opacity" ? Math.round(parseFloat(getStyle(obj,attr))*100) : parseInt(getStyle(obj,attr));
+			var iSpeed = (json[attr]-iCur)/8;
+			iSpeed = iSpeed>0? Math.ceil(iSpeed): Math.floor(iSpeed);
+			json[attr]!=iCur && (bStop = false);
+			
+			if(attr=="opacity")
+			{
+				obj.style.opacity = (iCur+iSpeed);
+				obj.style.filter = "alpha(opacity:"+ (iCur+iSpeed) +")";
+			}
+			else
+			{
+				obj.style[attr] = iCur+iSpeed+"px";
+			};;
+		};
+		if(bStop)
+		{
+			clearInterval(obj.timer);
+			fn && fn.call(obj);
+		};
+	},30);
+};
+
+//微博发布框交互
+function wSent()
+{
+	var oTxt= document.getElementById("txt1");
+	var oBtn = document.getElementById("btn1");
+	var oUl = document.getElementById("ul1");
+	var oP = document.getElementsByTagName("p")[0];
+	var iNum = 0;
+	var timer =null;
+	var ie =!-[1,];
+	
+	
+	oTxt.onfocus = function()
+	{
+		var iLength = Math.ceil(getByteLength(oTxt.value)/2);
+		oP.innerHTML = '发言请遵守社区公约，还可以输入<span>'+ iLength +'</span>字'
+	};
+	
+	oTxt.onblur = function()
+	{
+		
+		if(this.value == '')
+		{
+			oP.innerHTML = '阿娇微博公开与韩国男恋情，称会狠狠幸福下去　24时热博';
+		};	
+	};
+	
+	if(ie)
+	{
+		oTxt.onpropertychange = toChange;
+	}else
+	{
+		oTxt.oninput = toChange;
+	}
+	
+	
+	function getByteLength(str)
+	{
+		return str.replace(/[^\x00-\xff]/g,'dd').length;
+	};
+	
+	function toChange()
+	{
+		var iLength = Math.ceil(getByteLength(oTxt.value)/2);
+		if(this.value =='')
+		{
+			oBtn.className = 'dis';
+		}else if(iLength>140)
+		{
+			oBtn.className = 'dis';
+			oP.innerHTML= '发言请遵守社区公约，已经超过 <span style="color:#fff">'+(iLength-140) +'</span>字'
+		}else
+		{
+			oP.innerHTML = '发言请遵守社区公约，还可以输入<span>'+ iLength +'</span>字'
+			oBtn.className = '';
+		};
+	}
+	
+	
+	oBtn.onclick = function()
+	{		
+		if(this.className == 'dis')
+		{
+			clearInterval(timer);
+			timer = setInterval(function(){
+				iNum++;
+				if(iNum!=5)
+				{
+					oTxt.style.backgroundColor = iNum%2 ? '#666' : '';
+				}else
+				{
+					clearInterval(timer);
+					iNum=0;
+				};
+			},100)			
+			
+		}else
+		{
+			var oDiv = document.createElement("div");
+			var aDiv = oUl.getElementsByTagName("div");
+			oDiv.innerHTML = oTxt.value;
+			oTxt.value= "";
+			if(aDiv.length)
+			{
+				oUl.insertBefore(oDiv,aDiv[0]);
+				
+			}
+			else
+			{
+				oUl.appendChild(oDiv);
+			};
+			iHeight = oDiv.offsetHeight;
+			oDiv.style.height=0;
+			startMove(oDiv,{height:iHeight,"opacity":100});
+			oBtn.className = 'dis';
+			oP.innerHTML = '发言请遵守社区公约，还可以输入<span>140</span>字'
+		};
+	};
+};
+wSent();
+</script>
+</html>

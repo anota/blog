@@ -1,0 +1,142 @@
+---
+title: UC乐园Loading
+---
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width = device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>UC乐园</title>
+<style>
+body{
+  background: #000;
+}
+/*loading optimize
+------------------------------------- */
+.loading {
+  position:absolute;
+  width:36px;
+  height:36px;
+  top:50%;
+  left:50%;
+  margin-left:-18px;
+  margin-top:-18px;
+}
+.loading-child {
+  border:3px solid #c8cdd3;
+  border-radius:30px;
+  width:30px;
+  height:30px;
+  display:block;
+  -webkit-animation:load 1.2s infinite linear;
+}
+.loading-child:after {
+  display:block;
+  content:"";
+  width:15px;
+  height:15px;
+  -webkit-border-top-left-radius:30px;
+  border-left:3px solid #3289FF;
+  border-top:3px solid #3289FF;
+  margin-left:-3px;
+  margin-top:-3px;
+}
+@-webkit-keyframes load {
+0% {
+-webkit-transform: rotate(0deg);
+}
+ 50% {
+-webkit-transform:rotate(180deg);
+}
+ 100% {
+-webkit-transform: rotate(360deg);
+}
+}
+/*下拉刷新
+------------------------------------- */
+.pull-to-refresh {
+  text-align: center;
+  overflow: hidden;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition-duration: 0ms;
+  display:-webkit-box;
+  -webkit-box-align:center;
+  -webkit-box-pack:center;
+  color:#99a1b3;
+  font-size:12px;
+  line-height:19px;
+  position:relative;
+  z-index:-1;
+  margin-bottom:10px;
+}
+.pull-refresh-icon {
+  display:block;
+  background:url(../../../../../../../images/mobile/base/pull_arrow.png) no-repeat 0 0;
+  background-size:20px 30px;
+  width:20px;
+  height:30px;
+  -webkit-transition-duration:250ms;
+  position:absolute;
+  left:33px;
+  margin-top:10px;
+}
+.pull-refresh-text {
+  display:block;
+}
+.pull-refresh-text:before {
+  content:"下拉即可刷新";
+  display:block;
+  font-size:14px;
+  line-height:19px;
+}
+.flip .pull-refresh-icon {
+  -webkit-transform:rotate(180deg);
+}
+.flip .pull-refresh-text:before {
+  content:"松开即可刷新";
+}
+.refreshing .pull-refresh-icon {
+  margin-top:15px;
+  background:transparent;
+  border:2px solid #c8cdd3;
+  border-radius:20px;
+  width:16px;
+  height:16px;
+  content:"";
+  display:block;
+}
+.refresh-loading {
+  display:none;
+}
+.refreshing .refresh-loading {
+  display:block;
+  -webkit-animation:load 1.2s infinite linear;
+  position:absolute;
+  height:20px;
+  width:20px;
+  left:-2px;
+  top:-2px;
+  -webkit-transform-style: preserve-3d;
+}
+.refreshing .refresh-loading:after {
+  position:absolute;
+  content:"";
+  width:8px;
+  height:8px;
+  -webkit-border-top-left-radius:16px;
+  border-left:2px solid #3289FF;
+  border-top:2px solid #3289FF;
+  left:0;
+  top:0;
+}
+.refreshing .pull-refresh-text:before {
+  content:"加载中……";
+}
+</style>
+</head>
+<body>
+<div class="loading">
+  <i class="loading-child"></i>
+</div>
+</body>
+</html>

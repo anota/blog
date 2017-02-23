@@ -1,0 +1,184 @@
+---
+title: 拖拽查看器
+---
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+html,body{ height:100%; margin:0; padding:0; }
+body{ background:#000; font-size:16px; font-family:Arial, Helvetica, sans-serif;}
+#progressBox{ width:300px; height:30px; border:1px solid #ccc; line-height:30px; position:absolute; left:50%; top:50%; margin-top:-15px; margin-left:-150px;}
+#progressBar{ position:absolute; left:0; top:0; width:100%; height:100%; text-align:center;  clip:rect(0 0px 30px 0); background:#666; z-index:2; color:#fff;}
+#progressText{ position:absolute;left:0; top:0;width:100%; height:100%; text-align:center; text-align:center; color:#ccc; z-index:1;}
+#picWrap{ height:100%; overflow-y:hidden; text-align:center; cursor:w-resize;}
+#picWrap img{ min-height:100%; min-width:100%; display:none; }
+</style>
+<meta charset="utf-8" />
+<title>showgirl</title>
+</head>
+
+<body>
+<div id="progressBox">
+	<div id="progressBar">0%</div>
+    <div id="progressText">0%</div>
+</div>
+<div id="picWrap">
+</div>
+</body>
+<script>
+
+/*
+ * weibo:@anota@ju
+ * name：scroll 拖拽与滚动控制图片运动
+ * 实现原理：
+ *  1.拖拽控制图片显示
+ *  2.鼠标滚动控制图片显示
+ *  3.拖拽有加速度
+ *  4.硬编码的进度条
+ *  5.各种做过的知识结合
+ *  6.
+ */
+
+(function(){
+	var oBox = document.getElementById("progressBox");
+	var oText= document.getElementById("progressText");
+	var oBar = document.getElementById("progressBar");
+	var oWrap = document.getElementById("picWrap");
+	var SCALE = 20;
+	var aImg = [];
+	var iImgCount = 50;
+	var iLoaded = 1;
+	var iNow =1;
+	for(var i =0;i<iImgCount;i++)
+	{
+		(function(i){
+			var oNewImg = new Image();
+			oNewImg.onload = function()
+			{
+				//console.log(iLoaded)
+				oText.innerHTML = oBar.innerHTML = Math.ceil(iLoaded/iImgCount*100) + '%';
+				oBar.style.clip = 'rect(0 '+ Math.ceil(iLoaded/iImgCount*300) +'px 30px 0)';
+				oNewImg.onload = null;
+				var oImg = document.createElement("img");
+				oImg.src = this.src;
+				oWrap.appendChild(oImg);
+				aImg[i] = oImg;
+				
+				if((iLoaded++) == iImgCount)onload();
+			};
+			oNewImg.src = '{{site.baseurl}}/images/post/2013-09-18/'+ toDouble(i) +'.jpg';
+		})(i);
+	};
+	
+	//当图片加载完毕
+	function onload()
+	{
+		//初始化
+		oBox.style.display = 'none';
+		setTimeout(function(){aImg[1].style.display='block'},500);
+		var body = document.body;
+		var timer = null;
+		var num = iNow;
+		var speed =0;
+		lastImg = aImg[1];	
+		//鼠标拖拽的三个动作
+		var onMouse ={
+			down:function(e)
+			{
+				var oEv = e || event;
+				startX = oEv.clientX;
+				lastX = startX;
+				if(body.setCapture)
+				{
+					body.onmousemove = function(e){onMouse.move(e)};
+					body.onmouseup = onMouse.up;
+					body.setCapture();
+				}else
+				{
+					document.onmousemove = function(e){onMouse.move(e)};
+					document.onmouseup = onMouse.up;
+				};
+				clearInterval(timer);
+			},
+			move:function(e)
+			{
+				var oEv = e || event;
+				var i = (oEv.clientX - startX) / SCALE;
+				num = (iNow+i+Math.abs(Math.floor(i/iImgCount))*iImgCount)%iImgCount;
+				//console.log(parseInt(num))
+				if(lastImg != aImg[parseInt(num)])
+				{
+					switchMove(parseInt(num));
+				};
+				speed = -(oEv.clientX - lastX)/SCALE;
+				lastX = oEv.clientX;
+				return false;
+			},
+			up:function(e)
+			{
+				this.onmousemove = null;
+				this.onmouseup = null;
+				if(body.releaseCapture)body.releaseCapture();
+				iNow = num;
+				startMove();
+			},
+			wheel:function(e)
+			{
+				var oEv = e || event;
+				var bDown = true;
+				bDown = oEv.wheelDelta ? oEv.wheelDelta < 0 : oEv.detail > 0;
+				bDown ? ++iNow : iNow-- ;
+				iNow = parseInt(Math.abs(iNow+iImgCount)%iImgCount);
+				if(lastImg != aImg[iNow])switchMove(iNow);
+				clearInterval(timer);
+				oEv.preventDefault && oEv.preventDefault();
+				return false;
+			}	
+		};
+		
+		document.onmousedown = function(e){onMouse.down(e);return false;};
+		//绑定鼠标滚轮
+		addEvent('mousewheel',document,function(e){onMouse.wheel(e)});
+		addEvent('DOMMouseScroll',document,function(e){onMouse.wheel(e)});	
+		
+		//惯性运动
+		function startMove()
+		{
+			timer = setInterval(function(){
+				iNow = (iNow+speed + Math.abs(Math.floor(i/iImgCount))*iImgCount)%iImgCount;
+				lastImg.style.display = 'none';
+				//console.log(iNow);
+				aImg[parseInt(iNow)].style.display = 'block';
+				lastImg = aImg[parseInt(iNow)];
+				speed*=0.8;
+				if(Math.abs(speed)<=1)
+				{
+					clearInterval(timer);
+					speed = 0;
+				}
+			},17)
+		};
+	};
+	
+	//封装的鼠标滚动和鼠标拖动切换图片
+	function switchMove(num)
+	{
+		lastImg.style.display = 'none';
+		aImg[num].style.display = 'block';
+		lastImg = aImg[num];
+	};
+	
+	//封装监听绑定函数
+	function addEvent(sEvent, obj, fn)
+	{
+		obj.attachEvent ? obj.attachEvent('on'+sEvent, fn) : obj.addEventListener(sEvent, fn, false);
+	}
+	
+	//转成两位数
+	function toDouble(num)
+	{
+		return num>9 ? num : '0'+num;
+	}
+})()
+</script>
+</html>

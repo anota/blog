@@ -1,0 +1,180 @@
+---
+title: 模拟百叶窗
+---
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>百叶窗</title>
+<style>
+*{ margin:0; padding:0;}
+li{ list-style:none;}
+#ul1,#ul2{ width:300px; height:auto; float:left; border-top:1px #000000 solid; margin:20px;}
+li{ width:100%; height:30px; overflow:hidden; position:relative; border-bottom:1px #333333 dashed; line-height:30px;}
+li div{ position:absolute; top:-30px;}
+li div p { height:30px;}
+</style>
+</head>
+
+<body>
+<ul id="ul1">
+	<li>
+    	<div>
+        	<p>1111111111</p>
+            <p>2222222222</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>3333333333</p>
+            <p>4444444444</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>5555555555</p>
+            <p>6666666666</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>7777777777</p>
+            <p>8888888888</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>9999999999</p>
+            <p>aaaaaaaaaa</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>bbbbbbbbbb</p>
+            <p>cccccccccc</p>
+        </div>
+    </li>
+</ul>
+
+
+<ul id="ul2">
+	<li>
+    	<div>
+        	<p>1111111111</p>
+            <p>2222222222</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>3333333333</p>
+            <p>4444444444</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>5555555555</p>
+            <p>6666666666</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>7777777777</p>
+            <p>8888888888</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>9999999999</p>
+            <p>aaaaaaaaaa</p>
+        </div>
+    </li>
+    <li>
+    	<div>
+        	<p>bbbbbbbbbb</p>
+            <p>cccccccccc</p>
+        </div>
+    </li>
+</ul>
+<script>
+	function getStyle(obj,attr)
+	{
+		return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj,false)[attr];
+	}
+
+	function bufferMove(obj,oTarget,fnCallBack)
+	{
+		clearInterval(obj.timer);
+		obj.timer = setInterval(onInterval,30);
+
+		function onInterval()
+		{
+			var bStop = true;
+			var iCur = 0;
+			var iSpeed = 0;
+			for(attr in oTarget)
+			{
+				iCur = parseInt(getStyle(obj,attr)) || 0;
+				iSpeed = (oTarget[attr] - iCur)/8;
+				iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+
+				if(iCur != oTarget[attr])
+				{
+					bStop = false;
+				}
+
+				obj.style[attr] = iCur + iSpeed + "px";
+			}
+			if(bStop)
+			{
+				clearInterval(obj.timer);
+				obj.timer = null;
+				if(fnCallBack)
+				{
+					fnCallBack();
+				}
+			}
+		}
+	}
+
+	(function(){
+		var aUl = document.getElementsByTagName("ul");
+
+		toShow(aUl[0]);
+		
+		setTimeout(function(){
+			toShow(aUl[1]);
+		},1000);
+
+		function toShow(obj)
+		{
+			var iNow = 0;
+			var aDiv = obj.getElementsByTagName("div");
+			var bUp = true;
+			var timer = null;
+
+			setInterval(function(){
+				toChange();
+			},4000);
+
+			function toChange(){
+
+				timer = setInterval(function(){
+					if(iNow == aDiv.length)
+					{
+						clearInterval(timer);
+						iNow = 0;
+						bUp = !bUp;
+					}else if(bUp){
+						bufferMove(aDiv[iNow],{top:0});
+						iNow++;
+					}else{
+						bufferMove(aDiv[iNow],{top:-30});
+						iNow++;
+					}
+				},100)
+			}
+		}
+	})()
+</script>
+</body>
+</html>

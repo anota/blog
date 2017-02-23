@@ -1,0 +1,95 @@
+---
+title: 手机：滑动幻灯片
+---
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>touch_move</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<style type="text/css">
+* {
+  margin: 0;
+  padding: 0;
+  border:none 0;
+}
+h1{
+  color:#ccc;
+  font-size:18px;
+  text-align:center;
+  margin-top:20px;
+}
+body{
+  background:#000;
+}
+ul, li {
+  list-style:none;
+}
+div {
+  width:100%;
+  overflow:hidden;
+  margin-top:50px;
+  position:relative;
+  height:60px;
+}
+p{
+  margin-top:20px;
+  display:-webkit-box;
+  -webkit-box-pack:center;
+  height:10px;
+}
+p i{
+  display:block;
+  width:4px;
+  height:4px;
+  margin:0 5px;
+  background:#f90;
+  border-radius:10px;
+}
+p .on{
+  background:#fff;
+}
+ul {
+  overflow:hidden;
+  -webkit-transition: -webkit-transform 100ms;
+  -webkit-transform: translate3d(0px, 0, 0);
+  display:-webkit-box;
+  width:100%;
+}
+li {
+  width:25%;
+  height:60px;
+  line-height:60px;
+  text-align:center;
+  -webkit-box-sizing:border-box;
+}
+img{ border:2px solid #fff;}
+</style>
+</head>
+<body>
+<h1>手机上滑动切换效果(Glide)、可以选择一页多少张图片</h1>
+<div id="lev">
+  <ul>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/4078208_100907644915_2.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1154223_500.jpg" /></li>
+    <li><img height="56" src="{{site.baseurl}}/images/post/2013-09-19/photo_1050949_500.jpg" /></li>
+  </ul>
+</div>
+<p><i></i></p>
+</body>
+<script src="{{site.baseurl}}/js/post/2013-09-19/jquery.min.js"></script>
+<script src="{{site.baseurl}}/js/post/2013-09-19/jquery.glide.js"></script>
+<script>
+window.onload = window.onresize = function() 
+{
+    $("#lev li").glide({
+					 });
+}
+</script>
+</html>

@@ -1,0 +1,510 @@
+---
+title: UC9.0开屏引导
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>新手引导</title>
+	<meta name="viewport" content="width = device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body,div,ul,li,p{
+		margin: 0;
+		padding: 0;
+	}
+	body,html{
+		height: 100%;
+		width: 100%;
+	}
+	ul,li,ol{
+		list-style: none;
+	}
+	#container{
+		height: 100%;
+		width: 320px;
+		overflow: hidden;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\bg_blue.png);
+		background-repeat: no-repeat;
+		background-size: 320px 568px;
+		position: relative;
+	}
+	.page-left1{
+		position: absolute;
+		height: 237px;
+		width: 146px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\left1.png);
+		background-size: 146px 237px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(-338px, 540px, 0px);
+	}
+	.page-left2{
+		position: absolute;
+		height: 237px;
+		width: 146px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\left2.png);
+		background-size: 146px 237px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(-253px, 454px, 0px);
+	}
+	.page-right1{
+		position: absolute;
+		height: 237px;
+		width: 151px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\right1.png);
+		background-size: 151px 237px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(520px, -260px, 0px);
+		z-index: 1;
+	}
+	.page-right2{
+		position: absolute;
+		height: 237px;
+		width: 151px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\right2.png);
+		background-size: 151px 237px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(435px, -175px, 0px);
+	}
+	.new-title{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\new_title.png);
+		background-size: 315px 102px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(488px, -8px, 0px);
+	}
+	.new-ari{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\new_ari.png);
+		background-size: 315px 102px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(670px, 0, 0px);
+	}
+	.split{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\split.png);
+		background-size: 315px 102px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(488px, 0px, 0px);
+	}
+	.fire1,.fire2,.fire3{
+		position: absolute;
+		height: 564px;
+		width: 466px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fire1.png);
+		background-size: 466px 564px;
+		background-repeat: no-repeat;
+		-webkit-transition: 100ms;
+		-webkit-transform: translate3d(-480px, 362px, 0px);
+	}
+	.fire2{
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fire2.png);
+		-webkit-transition: 200ms;
+		-webkit-transform: translate3d(-492px, 593px, 0px);
+	}
+	.fire3{
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fire3.png);
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(-492px, 756px, 0px);
+	}
+	
+	.fast-title,.fast-ari{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fast_title.png);
+		background-size: 315px 102px;
+		-webkit-transition: 200ms;
+		background-repeat: no-repeat;		
+		-webkit-transform: translate3d(488px, -8px, 0px);
+	}
+	.fast-ari{
+		-webkit-transition: 300ms;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fast_ari.png);
+		-webkit-transform: translate3d(670px, 0px, 0px);
+	}
+	.logo-num{
+		position: absolute;
+		height: 170px;
+		width: 203px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\logo_num.png);
+		background-size: 203px 170px;
+		background-repeat: no-repeat;
+		-webkit-transition: 200ms;
+		-webkit-transform: translate3d(380px, 100px, 0px);
+	}
+	.logo-more-text{
+		position: absolute;
+		height: 71px;
+		width: 203px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\uc_title.png);
+		background-size: 203px 71px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(380px, 270px, 0px);
+	}
+	.login-btn{
+		position: absolute;
+		height: 48px;
+		width: 138px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\btn.png);
+		background-size: 138px 48px;
+		background-repeat: no-repeat;
+		-webkit-transition: 400ms;
+		-webkit-transform: translate3d(380px, 360px, 0px);
+	}
+	.login-btn.press{
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\btn_press.png);
+	}
+	.phone-wrap,.phone-alpha,.phone-line,.phone-mask{
+		height: 338px;
+		width: 182px;
+		background-repeat: no-repeat;
+		background-size: 182px 338px;
+		-webkit-transition: 300ms;
+		position: relative;
+		z-index: 2;
+		top:0;
+	}
+	.phone-wrap{
+		-webkit-transform:translate3d(69px, 86px, 0) scale(0);
+		opacity: 0;
+	}
+	.phone-alpha{
+		position: absolute;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\phone_alpha.png);
+		left: 0;
+	}
+	.phone-line{
+		position: absolute;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\phone_line.png);
+		left: 0;
+		opacity: 0;
+	}
+	.phone-mask{
+		position: absolute;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\phone_page.png);
+		background-position: right center;
+		width: 0;
+		right: 0;
+	}
+	.logo-line,.logo-solid{
+		position: absolute;
+		height: 195px;
+		width: 210px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\logo_line.png);
+		background-size: 210px 195px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		left: 0;
+		top:0;
+	}
+	.logo-wrap{
+		height: 195px;
+		width: 210px;
+		position: absolute;
+		left:0;
+		top: 0;
+		-webkit-transform: translate3d(55px, 150px, 0px);
+	}
+	.logo-solid{
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\logo.png);
+		-webkit-transition: 300ms;
+		opacity: 0;
+	}
+	.index-wrap{
+		position: absolute;
+		width: 100px;
+		bottom:10px;
+		left:50%;
+		margin-left: -50px;
+	}
+	.index-wrap i{
+		height: 9px;
+		width: 9px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\index_off.png);
+		background-size: 9px 9px;
+		background-repeat: no-repeat;
+		float: left;
+		margin: 0 8px;
+	}
+	.index-wrap .on{
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\index_on.png);
+	}
+	.alpha-left1{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fast_title.png);
+		background-size: 315px 102px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(0, -4px, 0px);
+	}
+	.alpha-right1{
+		position: absolute;
+		height: 102px;
+		width: 315px;
+		background-image: url({{site.baseurl}}/images/post/2013-09-22\fast_title.png);
+		background-size: 315px 102px;
+		background-repeat: no-repeat;
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(0, -4px, 0px);
+	}
+	.hide{
+		display: none !important;
+	}
+	/*page1*/
+	.page1 .phone-wrap{
+		-webkit-transform:translate3d(69px, 86px, 0) scale(1);
+		-webkit-transition: 400ms;
+		-webkit-transition-delay: 200ms;
+		opacity: 1;
+	}
+	.page1 .phone-line{
+		opacity: 1;
+		-webkit-transition-duration:800ms;
+		-webkit-transition-delay: 500ms;
+	}
+	.page1 .logo-wrap,.page2 .logo-wrap{
+		-webkit-transition:600ms;
+		-webkit-transition-delay:400ms;
+		-webkit-transform:translate3d(55px, 150px, 0px) scale(0.6);
+		opacity: 0;
+	}
+	.page1 .logo-line,.page2 .logo-line,.page3 .logo-line,.page4 .logo-line{
+		-webkit-transition:300ms;
+		opacity: 0;
+	}
+	.page1 .logo-solid{
+		-webkit-transition:400ms;
+		opacity: 1;
+	}
+	/*page2*/
+	.page2 .page-left1{
+		-webkit-transform: translate3d(27px, 175px, 0px);
+	}
+	.page2 .page-left2{
+		-webkit-transform: translate3d(27px, 175px, 0px);
+	}
+	.page2 .page-right1{
+		-webkit-transform: translate3d(153px, 108px, 0px);
+	}
+	.page2 .page-right2{
+		-webkit-transform: translate3d(153px, 108px, 0px);
+	}
+	.page2 .new-title{
+		-webkit-transform: translate3d(0, -8px, 0px);
+	}
+	.page2 .new-ari{
+		-webkit-transform: translate3d(0, 0, 0px);
+	}
+	.page2 .split{
+		-webkit-transform: translate3d(0, -0, 0px);
+	}
+	.page2 .new-title{
+		-webkit-transition: 200ms;
+		-webkit-transform: translate3d(0px, -8px, 0px);
+	}
+	.page2 .new-ari{
+		-webkit-transition: 300ms;
+		-webkit-transform: translate3d(0px, 0, 0px);
+	}
+	.page2 .split ,.page3 .split{
+		-webkit-transform: translate3d(0px, 0px, 0px);
+	}
+	.page2 .phone-wrap{
+		opacity: 1;
+		-webkit-transform:translate3d(69px, 86px, 0);
+	}
+	.page2 .phone-mask{
+		width: 182px;	
+	}
+	.page2 .phone-line,.page3 .phone-line,.page4 .phone-line{
+		width: 182px;	
+	}
+	.page2 .phone-alpha,.page3 .phone-alpha,.page4 .phone-alpha{
+		width: 182px;	
+	}
+	.page2 .phone-mask,.page3 .phone-mask,.page4 .phone-mask{
+		width: 182px;	
+	}
+	/*page3*/
+	.page3 .fast-title{
+		-webkit-transform: translate3d(0, -8px, 0px);
+	}
+	.page3 .fast-ari{
+		-webkit-transform: translate3d(0, 0px, 0px);
+	}
+	.page3 .new-title,.page4 .new-title{
+		-webkit-transform: translate3d(-365px, -8px, 0px);
+	}
+	.page3 .new-ari,.page4 .new-ari{
+		-webkit-transform: translate3d(-295px, -8px, 0px);
+	}
+	.page3 .fire1{
+		-webkit-transform: translate3d(-171px, 53px, 0px);
+	}
+	.page3 .fire2{
+		-webkit-transform: translate3d(-132px, 24px, 0px);
+	}
+	.page3 .fire3{
+		-webkit-transform: translate3d(-156px, 74px, 0px);
+	}
+	.page3 .page-left1{
+		-webkit-transform: translate3d(59px, 143px, 0px);
+		opacity: 0;
+	}
+	.page3 .page-left2{
+		-webkit-transform: translate3d(59px, 143px, 0px);
+		opacity: 0;
+	}
+	.page3 .page-right1{
+		-webkit-transform: translate3d(124px, 137px, 0px);
+		opacity: 0;
+	}
+	.page3 .page-right2{
+		-webkit-transform: translate3d(124px, 137px, 0px);
+		opacity: 0;
+	}
+	.page3 .phone-wrap{
+		-webkit-transform: translate3d(9px, 86px, 0px);
+		opacity: 1;
+	}
+	/*page4*/
+	.page4 .fire1{
+		-webkit-transform: translate3d(280px, -394px, 0px);
+		opacity: 0;
+		-webkit-transition: 300ms;
+	}
+	.page4 .fire2{
+		-webkit-transform: translate3d(214px, -316px, 0px);
+		opacity: 0;
+		-webkit-transition: 300ms;
+	}
+	.page4 .fire3{
+		-webkit-transform: translate3d(94px, -165px, 0px);
+		opacity: 0;
+		-webkit-transition: 300ms;
+	}
+	.page4 .phone-wrap{
+		-webkit-transform: translate3d(-279px, 86px, 0px);
+	}
+	.page4 .fast-title{
+		-webkit-transform: translate3d(-300px, -8px, 0px);
+	}
+	.page4 .fast-ari{
+		-webkit-transform: translate3d(-300px, 0px, 0px);
+	}
+	.page4 .split{
+		-webkit-transform: translate3d(-300px, -0, 0px);
+	}
+	.page4 .logo-num{
+		-webkit-transform: translate3d(60px, 100px, 0px);
+	}
+	.page4 .logo-more-text{
+		-webkit-transform: translate3d(60px, 270px, 0px);
+	}
+	.page4 .login-btn{
+		-webkit-transform: translate3d(90px, 360px, 0px);
+	}
+	</style>
+</head>
+<body>
+<section id='container' class='page0'>
+	<section class="header-wrap">
+		<div class="new-title"></div>
+		<div class="new-ari"></div>
+		<div class="split"></div>
+		<div class="fast-title"></div>
+		<div class="fast-ari"></div>
+	</section>
+	<section class='wegdit-wrap'>
+		<div class="page-left1"></div>
+		<div class="page-left2"></div>
+		<div class="page-right1"></div>
+		<div class="page-right2"></div>
+	</section>
+	<section class="fire-wrap">
+		<div class="fire1"></div>
+		<div class="fire2"></div>
+		<div class="fire3"></div>
+	</section>
+	<section class="login-wrap">
+		<div class="logo-num"></div>
+		<div class="logo-more-text"></div>
+		<div class="login-btn"></div>
+	</section>
+	<section class="phone-wrap" >
+		<div class="phone-alpha"></div>
+		<div class="phone-line"></div>
+		<div class="phone-mask"></div>
+	</section>
+	<section class="logo-wrap">
+		<div class="logo-line"></div>
+		<div class="logo-solid"></div>
+	</section>
+	<section class="index-wrap" id='indexWrap'>
+		<i></i>
+		<i></i>
+		<i></i>
+		<i></i>
+	</section>
+	<section class="alpha-wrap hide">
+		<div class="alpha-left1"></div>
+		<div class="alpha-right1"></div>
+	</section>
+</section>
+</body>
+<script type="text/javascript" src='{{site.baseurl}}/js/jquery.js'></script>
+<script type="text/javascript" src='{{site.baseurl}}/js/jquery.touchwipe.js'></script>
+<script type="text/javascript">
+	~function(){
+		var iNum = 0;
+		var oDoc = document;
+		var oContainer = oDoc.getElementById('container');
+		var oIndexWrap = oDoc.getElementById('indexWrap');
+		var aI = oIndexWrap.getElementsByTagName('i');
+		var i = 0;
+		//引入插件 迟点会替换成原生js。
+		$(document).touchwipe({
+			wipeRight: function() {
+				if(iNum>0){
+					iNum--;
+					pageMove();
+				}	
+			},
+ 			wipeLeft: function() {
+ 				if(iNum<4){
+					iNum++;
+					pageMove();
+				}
+ 			}
+		});
+		function pageMove(){
+			oContainer.className = 'page'+(iNum);
+			for(i=0;i<aI.length;i++ )
+			{
+				aI[i].className = '';
+			}
+			if(iNum>0)
+			{
+				aI[iNum-1].className = 'on';
+			}
+			
+		}
+	}()
+</script>
+</html>

@@ -1,0 +1,108 @@
+---
+title: 模拟mac系统Dock
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="{{site.baseurl}}/css/post/2013-09-22/style.css">
+</head>
+<body>
+	<div class="icons_size" id='iconsSize'><span></span></div>
+	<div class="icons_wrap icon" id='iconsWrap'>
+		<span>Ä</span>
+		<span>Å</span>
+		<span>Æ</span>
+		<span>Ø</span>
+		<span>d</span>
+		<span>e</span>
+		<span>f</span>
+		<span>g</span>
+		<span>h</span>
+		<span>^</span>
+	</div>
+</body>
+<script type="text/javascript">
+(function(){
+	var aTxt = document.getElementsByTagName('input');
+	var oWrap = document.getElementById('iconsWrap');
+	var aSpan = oWrap.getElementsByTagName('span');
+	var oSize = document.getElementById('iconsSize');
+	var oSizeBtn = oSize.getElementsByTagName('span')[0];
+	var iSizeBtnRange = oSize.offsetWidth - oSizeBtn.offsetWidth;
+	//初始值
+	var g_iconSize = 100;
+
+	//根据g_iconSize初始化
+	for(var i=0;i<aSpan.length;i++)
+	{
+		aSpan[i].style.fontSize = parseInt(0.7*g_iconSize) + 'px';
+	}
+	var oBtnPosScale = (g_iconSize-50)/200;
+	oSizeBtn.style.left = oBtnPosScale*iSizeBtnRange + 'px';
+
+	//鼠标移动与icons大小关系 ->勾股定理
+	document.onmousemove = function(e)
+	{
+		var oEv = e || event;
+		for(var i =0 ;i<aSpan.length;i++)
+		{
+			var x = aSpan[i].offsetLeft + aSpan[i].offsetWidth/2;
+			var y = aSpan[i].offsetTop + oWrap.offsetTop + aSpan[i].offsetHeight/2;
+			var a = oEv.clientX -x;
+			var b = oEv.clientY - y;
+			//勾股定理
+			var dis = Math.sqrt(Math.pow(a,2)+ Math.pow(b,2));
+			//iconsize大小与远近关系
+			var scale = 1-(dis/(200+((g_iconSize-50)/150*800)));
+			//console.log(200+((g_iconSize-50)/150*800));
+			if(scale < 0.7)scale = 0.7;
+			aSpan[i].style.fontSize = parseInt(scale*g_iconSize) + 'px';
+		}
+	}
+
+	//调节条
+	oSizeBtn.onmousedown = function(e)
+	{
+		var oEv  = e ||event;
+		var startX = oEv.clientX - this.offsetLeft;
+		//调节条的控制层
+		function fnMove(e)
+		{
+			var oEv = e || event;
+			var disX = oEv.clientX - startX;
+			if(disX < 0)disX =0;
+			if(disX > iSizeBtnRange)disX = iSizeBtnRange;
+			oSizeBtn.style.left = disX + 'px';
+			var scale = disX/iSizeBtnRange;
+			//iconSize最大的范围 50 -200
+			g_iconSize = scale * 150 + 50;
+			for(var i=0;i<aSpan.length;i++)
+			{
+				aSpan[i].style.fontSize = parseInt(0.7*g_iconSize) + 'px';
+			}	
+		}
+		function fnEnd()
+		{
+			removeEvent(document,'mousemove',fnMove);
+			removeEvent(document,'mouseup',fnEnd);
+		}
+			//事件绑定
+			addEvent(document,'mousemove',fnMove);
+			addEvent(document,'mouseup',fnEnd);
+			return false;
+		}
+
+	//tool
+	function addEvent(obj,type,fn)
+	{
+		obj.attachEvent ? obj.attachEvent('on'+type,fn) : obj.addEventListener(type,fn,false);
+	}
+	function removeEvent(obj,type,fn)
+	{
+		obj.detachEvent ? obj.detachEvent('on'+type,fn) : obj.removeEventListener(type,fn,false);
+	}
+})()
+</script>
+</html>

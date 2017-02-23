@@ -1,0 +1,320 @@
+---
+title: 下雪了
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello,Anota</title>
+    <style>
+    div,ul,li,body,html{
+    margin: 0;
+    padding: 0;
+    }
+    ul,li{
+        list-style: none;
+    }
+    body{
+        background: #000;
+        font-size: 14px
+    }
+    html,
+    body{
+        height: 100%;
+    }
+    .course-wrap{
+        position: relative;
+        left: 0;
+        top: 0;
+        width: 750px;
+        height: 300px;
+        margin: 0px auto 0 auto;
+        padding: 150px 0 0;
+    }
+    ul{
+        width: 750px;
+        height: 300px;
+        position: relative;
+        left: 0;
+        top:0;
+    }
+    .hidden{
+        overflow: hidden;
+    }
+    li{
+        width: 150px;
+        height: 150px;
+        float: left;
+    }
+    li a{
+        display: block;
+        margin: 10px;
+        width: 130px;
+        height: 130px;
+        border: 1px solid #444;
+        color: #444;
+        text-align: center;
+        line-height: 130px;
+    }
+    li a:hover{
+        border: 1px solid #999;
+        color: #999;
+    }
+    li a:active{
+        border: 1px solid #ccc;
+        color: #ccc;
+    }
+    li img{
+        display: block;
+    }
+    .page{
+        width: 750px;
+        margin: 40px auto 0;
+        text-align: center;
+        font-size: 0;
+        position: relative;
+        z-index: 3;
+    }
+    .page a{
+        color: #444;
+        display: inline-block;
+        font-size: 14px;
+        width: 20px;
+        height: 20px;
+        line-height: 22px;
+        border: 1px solid #444;
+        margin: 5px;
+    }
+    .page a:hover{
+        text-decoration: none;
+        color: #999;
+        background: #333;
+    }
+    .page a:active,
+    .page a.on{
+        background: #000;
+        color: #ccc;
+    }
+    .footer{
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: 40px;
+        text-align: center;
+        color: #444;
+    }
+    .footer a{
+        color: #444;
+    }
+    .footer a:hover{
+        color: #eee;
+    }
+    .footer a:active{
+        color: #fff;
+    }
+    .box{
+        width: 100px;
+        height: 100px;
+        border:1px solid #ccc;
+        position: absolute;
+    }
+    </style>
+</head>
+<body>
+    <div class="course-wrap">
+        <ul id="boxes" class="hidden">
+            <li><a href="">1</a></li>
+            <li><a href="">2</a></li>
+            <li><a href="">3</a></li>
+            <li><a href="">4</a></li>
+            <li><a href="">5</a></li>
+            <li><a href="">6</a></li>
+            <li><a href="">7</a></li>
+            <li><a href="">8</a></li>
+            <li><a href="">9</a></li>
+            <li><a href="">10</a></li>
+            <li><a href="">11</a></li>
+            <li><a href="">12</a></li>
+            <li><a href="">13</a></li>
+            <li><a href="">14</a></li>
+            <li><a href="">15</a></li>
+            <li><a href="">16</a></li>
+            <li><a href="">17</a></li>
+            <li><a href="">18</a></li>
+            <li><a href="">19</a></li>
+            <li><a href="">20</a></li>
+            <li><a href="">21</a></li>
+            <li><a href="">22</a></li>
+            <li><a href="">23</a></li>
+            <li><a href="">24</a></li>
+            <li><a href="">25</a></li>
+            <li><a href="">26</a></li>
+            <li><a href="">27</a></li>
+            <li><a href="">28</a></li>
+            <li><a href="">29</a></li>
+            <li><a href="">30</a></li>
+        </ul>
+    </div>
+    <div class="page" id="page">
+        <a href="#">^</a>
+        <a href="#">v</a>
+    </div>
+</body>
+    <script src="http://localhost:8080/public/js/lib/jquery-1.7.2.js"></script>
+    <script>
+    ~function(){
+        function BsMove(){};
+        BsMove.prototype = {
+            init:function(opt){
+                var that = this;
+                that.$boxes = opt.$boxes || $("#boxes");
+                that.$li = that.$boxes.find("li");
+                that.$btnWrap = opt.$btnWrap || $("#page");
+                that.$prev = that.$btnWrap.find("a").eq(0);
+                that.$next = that.$btnWrap.find("a").eq(1);
+                that.ready = true;
+                that.now = 0;
+                that.wrapHeight = opt.wrapHeight ||that.$boxes.height();
+                that.cellHeight = that.wrapHeight / 2;
+                that.listNum = opt.listNum || 2;
+
+
+                that.transAbsoulte();
+                that.prev();
+                that.next();
+            },
+            transAbsoulte:function(){
+                var that = this;
+                var $li = that.$li;
+                $li.each(function(i){
+                    $li.eq(i).css("left",$li.eq(i)[0].offsetLeft);
+
+                    if(i >= that.listNum * 2)
+                    {
+
+                        $li.eq(i).css("top",that.wrapHeight);
+
+                    }
+                    else
+                    {
+
+                        $li.eq(i).css("top",parseInt(i/that.listNum)/2*that.wrapHeight);
+
+                    }
+                })
+
+                $li.css("position","absolute");
+                that.$boxes.find("li:lt("+ (that.listNum*2 -1) + ")" ).css("opacity",1);
+                that.$boxes.find("li:gt("+ (that.listNum*2 -1) + ")" ).css("opacity",0);
+                that.$boxes.removeClass("hidden");
+            },
+
+            prev:function(){
+
+                var that = this;
+                that.$prev.click(prev);
+
+                function prev(){
+
+                    var $li = that.$li;
+                    var cellHeight = that.cellHeight;
+
+                    if(that.now == 0)return;
+                    if(!that.ready)return;
+
+                    var i = that.now + that.listNum*2 -1;
+                    var timer = setInterval(function()
+                    {
+                        if(i<that.now) //first line
+                        {
+                            if(i == that.now - that.listNum)
+                            {
+                                $li.eq(i).animate({top:0,opacity:1},function()
+                                {
+                                    that.ready = true;
+                                })
+
+                            }
+                            else
+                            {
+                                $li.eq(i).animate({top:0,opacity:1});
+                            }
+                        }
+                        else if(i<that.now + that.listNum)
+                        {
+                            $li.eq(i).animate({top:that.cellHeight});
+                        }
+                        else
+                        {
+                            $li.eq(i).animate({top:that.wrapHeight,opacity:0});
+                        }
+
+                        i--;
+                        if(i == that.now - that.listNum - 1)
+                        {
+                            that.now-= that.listNum;
+                            clearInterval(timer);
+                        }
+
+                    },40);
+                }
+
+            },
+
+            next:function(){
+
+                var that = this;
+                that.$next.click(next);
+
+                function next(){
+                    var $li = that.$li;
+                    var cellHeight = that.cellHeight;
+                    if(that.now >=  $li.size() - that.listNum*2){
+                        return;
+                    };
+                    if(!that.ready)return;
+                    that.ready = false;
+
+                    var i = that.now;
+                    var timer = setInterval(function()
+                    {
+                        if(i<that.now+that.listNum)//第一行
+                        { 
+                            $li.eq(i).animate({top:-cellHeight,opacity:0});
+                        }
+                        else if(i < that.now + that.listNum*2) //第二行
+                        {
+                            $li.eq(i).animate({top:0});
+                        }
+                        else{
+
+                            if(i== (that.now + that.listNum*3-1))
+                            {
+                                $li.eq(i).animate({top:cellHeight,opacity:1},function(){
+                                    that.ready = true;
+                                })
+                            }
+                            else{
+                                $li.eq(i).animate({top:cellHeight,opacity:1});
+                            }
+
+                        }
+
+                        i++;
+                        if(i== that.now + that.listNum*3)
+                        {
+                            that.now += that.listNum;
+                            clearInterval(timer);
+                        }
+
+                    },40)
+                }
+
+            }
+
+        }
+
+        new BsMove().init({listNum:5});
+
+    }()
+    </script></html>
