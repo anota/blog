@@ -1,0 +1,237 @@
+---
+layout: demo
+title: 苹果官网产品展示导航条
+---
+<style>
+*{margin:0;padding:0;}
+body{ background:#000; font-size:12px; font-family:Arial, Helvetica, sans-serif;}
+a{ color:#eee;}
+ul,li{ list-style:none;}
+.content{ width:624px; margin:0 auto;}
+.content p{ line-height:80px; color:#ccc;}
+.wrap{width:564px; margin:0 30px 20px; overflow:hidden;}
+.wrap ul{ width:1128px; height:100px; position:relative;}
+.wrap li{ float:left; padding:10px; }
+.wrap a{ float:left; line-height:70px; font-size:20px; text-align:center; width:70px; height:70px;border:2px solid #ccc; }
+.wrap img{width:70px; height:70px; }
+.tab{ border-top:1px solid #ccc; height:40px; position:relative;}
+.tab a{ float:left; width:50%; color:#ccc; line-height:40px; text-align:center; cursor:pointer;}
+.tab a.on{ color:#fff;}
+.bg{ border-top:6px solid #ccc; border-left:6px solid transparent; border-right:6px solid transparent; position:absolute; width:0; height:0; left:153px;}
+.bg:after{border-top:5px solid #000; top:-7px; content:""; z-index:1; border-left:5px solid transparent; border-right:5px solid transparent; position:absolute; width:0; height:0; left:-5px;}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+
+<body>
+<div class="content">
+	<p>创意来源:<a href="http://www.apple.com.cn/mac/">苹果官网</a></p>
+    <div class="wrap">
+    	<ul>
+        	<li><a href="#">I</a></li>
+            <li><a href="#">am</a></li>
+            <li><a href="#">not</a></li>
+            <li><a href="#">a</a></li>
+            <li><a href="#">box</a></li>
+            <li><a href="#">.</a></li>
+            <li><a href="#">I</a></li>
+            <li><a href="#">am</a></li>
+            <li><a href="#">a</a></li>
+            <li><a href="#">magic</a></li>
+            <li><a href="#">box</a></li>
+            <li><a href="#">.</a></li>
+        </ul>
+    </div>
+    <div class="tab">
+    	<a class="on">Products</a>
+        <a>More</a>
+        <span class="bg"></span>
+    </div>
+</div>
+<script>
+var oDiv = document.getElementById("div1");
+var oBtn = document.getElementById("btn");
+//各种获取
+var get = {
+	style: function(obj,attr)
+	{
+		return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj,false)[attr];
+	},
+	tag:function(oParent,sTagName)
+	{
+		return oParent.getElementsByTagName(sTagName);
+	},
+	class:function(oParent,sClass)
+	{
+		var iResult = [];
+		aEle = oParent.getElementsByTagName("*");
+		for(var i =0;i<aEle.length;i++)
+		{
+			if(aEle[i].className == sClass)
+			{
+				iResult.push(aEle[i])
+			};
+		};
+		return iResult;
+	},
+	id:function(id)
+	{
+		return document.getElementById(id);
+	}
+};
+//各种运动
+var move ={
+	flex:function(obj,json,fn)
+	{
+		obj.timer && (clearInterval(obj.timer));
+		obj.timer = setInterval(function(){
+			var bStop = true;
+			for(attr in json)
+			{
+				if(!obj.iSpeed)obj.iSpeed={};
+				if(!obj.iSpeed[attr])obj.iSpeed[attr]=0;
+				iCur = parseInt(get.style(obj,attr));
+				obj.iSpeed[attr] += (json[attr] - iCur)/5;
+				obj.iSpeed[attr] *= 0.7;
+				l = iCur + obj.iSpeed[attr];
+				if(Math.abs(obj.iSpeed[attr])>1 || Math.abs(json[attr]-l)>1)
+				{	
+					bStop=false;
+					obj.style[attr] = iCur + obj.iSpeed[attr] + 'px';
+				}else
+				{
+					obj.style[attr] = json[attr]+'px';
+				};
+			};
+			if(bStop)
+			{
+				clearInterval(obj.timer);
+				if(fn)fn.call(obj);
+			};
+		},30);
+	},
+	buffer:function(obj,json,fn)
+	{
+		obj.timer && (clearInterval(obj.timer));
+		obj.timer = setInterval(function(){
+			var bStop = true;
+			for(attr in json)
+			{
+				if(!obj.iSpeed)obj.iSpeed={};
+				if(!obj.iSpeed[attr])obj.iSpeed[attr]=0;
+				iCur = parseInt(get.style(obj,attr));
+				obj.iSpeed[attr] = (json[attr] - iCur)/8;
+				obj.iSpeed[attr] = obj.iSpeed[attr]>0? Math.ceil(obj.iSpeed[attr]) : Math.floor(obj.iSpeed[attr]);
+				if(json[attr]!=iCur)
+				{	
+					bStop=false;
+					obj.style[attr] = iCur + obj.iSpeed[attr] + 'px';
+				};
+			};
+			if(bStop)
+			{
+				clearInterval(obj.timer);
+				if(fn)fn.call(obj);
+			};
+		},30);
+	}
+};
+
+//magic box
+function box()
+{
+	var oWrap = get.class(document,"wrap")[0];
+	var oUl = get.tag(oWrap,"ul")[0];
+	var aLi = get.tag(oUl,"li");
+	var aBtn = get.tag(get.class(document,"tab")[0],"a");
+	var oBg = get.class(document,"bg")[0];
+	var aPos = [];
+	var timer = null;
+	var onLast = 0;
+	for(var i=0;i<aLi.length;i++)
+	{
+		aLi[i].length = i;
+		aPos[i]= aLi[i].offsetLeft;
+	};
+	for(var i=0;i<aLi.length;i++)
+	{
+		console.log(aPos[i])
+		aLi[i].style.left = aPos[i]+'px';
+		aLi[i].style.position = 'absolute'
+	};
+	
+	aBtn[0].onclick=function ()
+	{
+		var i=aLi.length-1;		
+		clearTimeout(timer);		
+		function next()
+		{
+			var obj=aLi[i];
+			if(i>=aLi.length/2)
+			{
+				move.flex(aLi[i], {left: 900});
+				timer=setTimeout(next, 100);
+				i--;
+			}
+			else
+			{
+				timer=setTimeout(next2, 150);
+			}
+		}
+		
+		function next2()
+		{
+			if(i>=0)
+			{
+				move.flex(aLi[i], {left: aPos[i]});
+				timer=setTimeout(next2, 100);
+			}
+			i--;
+		}		
+		next();
+		
+		aBtn[1].className='';
+		this.className='on';
+		move.buffer(oBg, {left: 153});
+	};
+	aBtn[1].onclick=function ()
+	{
+		var i=0;
+		
+		clearTimeout(timer);
+		
+		function next()
+		{
+			var obj=aLi[i];
+			if(i<aLi.length/2)
+			{
+				move.flex(aLi[i], {left: -200});
+				timer=setTimeout(next, 100);
+				i++;
+			}
+			else if(i==aLi.length/2)
+			{
+				timer=setTimeout(next2, 150);
+			}
+		}
+		
+		function next2()
+		{
+			if(i<aLi.length)
+			{
+				move.flex(aLi[i], {left: aPos[i-aLi.length/2]});
+				timer=setTimeout(next2, 100);
+			}
+			i++;
+		}
+		
+		next();
+		
+		aBtn[0].className='';
+		this.className='on';
+		move.buffer(oBg, {left: 312+153});
+	};
+};
+box();
+</script>
