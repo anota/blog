@@ -50,79 +50,79 @@ img {
 <div id="boxes">
   <ul>
     <li>
-      <img src="/images/post/2017-02-23/mod (1).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (1).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (2).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (2).jpg" />
       <p>Hello,I am magic Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (3).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (3).jpg" />
       <p>Hello,I am a Box,This why part!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (11).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (11).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
   </ul>
   <ul>
     <li>
-      <img src="/images/post/2017-02-23/mod (4).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (4).jpg" />
       <p>Hello,I am a Box!,This why part</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (5).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (5).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (10).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (10).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (12).jpg" />
-      <p>Hello,I am a Box!</p>
-    </li>
-  </ul>
-  <ul>
-    <li>
-      <img src="/images/post/2017-02-23/mod (7).jpg" />
-      <p>Hello,I am a Box!</p>
-    </li>
-    <li>
-      <img src="/images/post/2017-02-23/mod (8).jpg" />
-      <p>Hello,I am a Box!</p>
-    </li>
-    <li>
-      <img src="/images/post/2017-02-23/mod (9).jpg" />
-      <p>Hello,I am a Box!</p>
-    </li>
-    <li>
-      <img src="/images/post/2017-02-23/mod (13).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (12).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
   </ul>
   <ul>
     <li>
-      <img src="/images/post/2017-02-23/mod (14).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (7).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (15).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (8).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (4).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (9).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
     <li>
-      <img src="/images/post/2017-02-23/mod (7).jpg" />
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (13).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (14).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (15).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (4).jpg" />
+      <p>Hello,I am a Box!</p>
+    </li>
+    <li>
+      <img src="{{ site.baseurl }}/images/post/2017-02-23/mod (7).jpg" />
       <p>Hello,I am a Box!</p>
     </li>
   </ul>
 </div>
 </body>
-<script type="text/javascript" src="/js/post/2017-02-23/new_ajax.js"></script>
+<script type="text/javascript" src="{{ site.baseurl }}/js/post/2017-02-23/new_ajax.js"></script>
 <script type="text/javascript">
 var bStop = true;
 var oBox = document.getElementById("boxes");
@@ -139,7 +139,7 @@ window.onscroll = function(){
 		if(posTop(lastLi) < iViewHeight+iScrollY && bStop)
 		{
 			bStop = false;
-			sUrl= "/js/post/2017-02-23/data ("+index+").js";
+			sUrl= "{{ site.baseurl }}/js/post/2017-02-23/data ("+index+").js";
 			index++;
 			ajax(sUrl,function(str){
 				var json = eval("("+str+")");
