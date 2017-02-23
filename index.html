@@ -10,3 +10,8 @@ title: 我的演示
     {% endfor %}
 </ul>
 <p>Mobile</p>
+<ul>
+    {% for post in site.static_files %}
+    <li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+</ul>
