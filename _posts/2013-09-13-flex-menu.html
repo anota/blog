@@ -1,0 +1,55 @@
+---
+layout: demo
+title: 弹性运动导航条
+---
+<style>
+* { padding: 0; margin: 0; }
+body{ background:#000; color:#ccc;}
+#nav{border:1px solid #ccc; padding:0 10px; width:420px; margin: 100px auto 0; }
+li { list-style: none; }
+ul { width: 400px; height: 50px; position: relative;}
+li { float: left; width: 98px; height: 48px; line-height: 48px;text-align: center; z-index: 2; position: relative; cursor: pointer; }
+.bg { width: 96px; height:30px; overflow: hidden; border:1px solid #ccc; position: absolute; top: 9px; left: 0; z-index: 1; }
+</style>
+<div id="nav">
+    <ul id="ul1">
+        <li>首页</li>
+        <li>关于我们</li>
+        <li>产品</li>
+        <li>联系方式</li>
+        <li class="bg"></li>
+    </ul>
+</div>
+<script>
+//弹性运动框架
+var iSpeed=0;
+var left=0;
+function flexMove(obj,iTarget)
+{
+	clearInterval(obj.timer);
+	obj.timer = setInterval(function(){
+		//弹性运动 必须要有前后退
+		iSpeed += (iTarget-obj.offsetLeft)/5;
+		iSpeed *=0.7;
+		left+=iSpeed;
+		if(Math.abs(iSpeed)<1&&Math.abs(iTarget-left)<1)
+		{
+			clearInterval(obj.timer);
+			obj.style.left = iTarget +"px";
+		}else
+		{
+			obj.style.left = left + "px";
+		}
+	},30)
+};
+var oUl = document.getElementById("ul1");
+var aLi = oUl.getElementsByTagName("li");
+var oBg= aLi[aLi.length-1];
+for(var i =0;i<aLi.length-1;i++)
+{
+	aLi[i].onmouseover = function()
+	{
+		flexMove(oBg,this.offsetLeft);
+	};
+};
+</script>

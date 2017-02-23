@@ -1,0 +1,108 @@
+---
+layout: demo
+title: 自由落体可拖拽弹性箱子
+---
+<style>
+body{ background:#000; font-family:Arial, Helvetica, sans-serif;}
+#div1 {width:70px; height:70px; overflow:hidden; border:1px solid #ccc; font-size:30px; line-height:70px; text-align:center; color:#ccc;position:absolute; top:80px; left:8px; cursor:pointer;font-size:30px;}
+#btn{ border:1px solid #ccc; background:none; color:#ccc; width:70px; line-height:30px; position:absolute; left:8px; cursor:pointer;}
+</style>
+<input type="button" id="btn" value="可拖拽箱"/>
+<div id="div1"><div id="div2">Box</div></div>
+<script>
+var oBtn = document.getElementById("btn");
+var oDiv = document.getElementById("div1");
+var oDiv2 = document.getElementById("div2");
+var timer =null;
+var iSpeedX = 0;
+var iSpeedY = 0;
+var maxL = document.documentElement.clientWidth - oDiv.offsetWidth;
+var maxT = document.documentElement.clientHeight - oDiv.offsetHeight;
+
+//拖拽
+oDiv.onmousedown = function(ev)
+{
+	clearInterval(timer);
+	var oEv = ev||event;
+	var disX = oEv.clientX - oDiv.offsetLeft;
+	var disY = oEv.clientY - oDiv.offsetTop;
+	var lastX = oDiv.offsetLeft;
+	var lastY = oDiv.offsetTop;
+	this.setCapture && this.setCapture;
+	document.onmousemove = function(ev)
+	{
+		var oEv = ev||event;
+		l=oEv.clientX-disX;
+		t=oEv.clientY-disY;
+		l<=0 && (l=0);
+		t<=0 && (t=0);
+		l>=maxL && (l=maxL);
+		t>=maxT && (t=maxT);
+		oDiv.style.left = l+"px";
+		oDiv.style.top = t+"px";
+		iSpeedX=l-lastX;
+		iSpeedY=t-lastY;
+		lastX=l;
+		lastY=t;
+		return false;
+	};
+	document.onmouseup=function()
+	{
+		document.onmousemove = null;
+		document.onmouseup = null;
+		flexMove();
+		return false;
+		oDiv.releaseCapture && oDiv.releaseCapture;
+	};
+	return false;
+};
+
+oBtn.onclick = function()
+{
+	flexMove();
+}
+//重力碰撞运动
+function flexMove()
+{
+	timer = setInterval(function(){
+		iSpeedY +=3;
+		var l=oDiv.offsetLeft + iSpeedX;
+		var t = oDiv.offsetTop + iSpeedY;
+		if(l<=0)
+		{
+			iSpeedX *=-0.8;
+			iSpeedY *=0.8;
+			l=0;
+		}else if (l>=maxL)
+		{
+			iSpeedX*=-0.8;
+			iSpeedY *=0.8;
+			l=maxL;
+		};
+		if(t<=0)
+		{
+			iSpeedY *=-1;
+			iSpeedX*=0.8;
+			t=0;
+		}else if (t>=maxT)
+		{
+			iSpeedX *=0.8;
+			iSpeedY *=-0.8;
+			t=maxT;
+		};
+		
+		Math.abs(iSpeedX)<1 && (iSpeedX=0);
+		Math.abs(iSpeedY)<1 && (iSpeedY = 0);
+		
+		if(t==maxT && iSpeedX== 0 && iSpeedY==0 )
+		{
+			//alert("关闭");
+			clearInterval(timer);			
+		}else
+		{
+			oDiv.style.left = l+"px";
+			oDiv.style.top = t+'px';
+		};
+	},30)
+};
+</script>
