@@ -1,0 +1,56 @@
+---
+title:hash记录浏览历史记录
+---
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>onhashchange</title>
+</head>
+<body>
+	<div></div>
+	<button>35选7</button>
+</body>
+	<script>
+
+	//onhashchange : 当hash值变化的时候后触发
+	//
+	window.onload = function(){
+		var oDiv = document.getElementsByTagName("div")[0];
+		var oBtn = document.getElementsByTagName("button")[0];
+		var obj = {};
+
+		oBtn.onclick = function(){
+			var number = randomNum(35,7);
+			oDiv.innerHTML = number;
+
+			var oRD  = Math.random();
+
+			//console.log(oRD);
+
+			obj[oRD] = number;
+
+			window.location.hash = oRD;
+		}
+
+		window.onhashchange = function(){
+			var number = obj[window.location.hash.substring(1)] || '';
+
+			oDiv.innerHTML = number;
+
+		}
+
+		function randomNum(arrs,now){
+
+			var newArr = [];
+
+			for(var i = 0;i<now;i++)
+			{
+				newArr.push(Math.floor(Math.random() * arrs));
+			}
+
+			return newArr;
+		}
+	}
+	</script>
+</html>

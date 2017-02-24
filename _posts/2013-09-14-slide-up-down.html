@@ -1,0 +1,135 @@
+﻿---
+title: 上下无限滚动
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name='viewport' content='width=device-width,user-scalable=no' />
+<title>无标题文档</title>
+<style>
+@font-face {
+font-family: 'RaphaelIcons';
+ src: url('{{site.baseurl}}/font/raphaelicons-webfont.eot');
+ src: local('☺'), url('{{site.baseurl}}/font/raphaelicons-webfont.woff') format('woff'), url('{{site.baseurl}}/font/raphaelicons-webfont.ttf') format('truetype'), url('{{site.baseurl}}/font/raphaelicons-webfont.svgwebfontKOf9F4sx') format('svg');
+ font-weight: normal;
+ font-style: normal;
+}
+.icon {
+  font-weight: normal;
+  font-style: normal;
+  line-height: normal;
+  font-family: 'RaphaelIcons';
+  font-size: 1.1em;
+  position: relative;
+  top: 0.1em;
+}
+body, ul, li, div {
+  margin:0;
+  padding:0;
+}
+body {
+  background:#000;
+  color:#ccc;
+}
+ul, li {
+  list-style:none;
+}
+a {
+  text-decoration:none;
+  color:#ccc;
+}
+a:hover {
+  color:#fff;
+}
+#slide {
+  width:102px;
+  margin:0 auto;
+}
+#wrap {
+  width:102px;
+  height:408px;
+  overflow:hidden;
+}
+ul {
+  position:absolute;
+  top:0;
+}
+li {
+  height:100px;
+  width:100px;
+  border:1px solid #ccc;
+  line-height:100px;
+  text-align:center;
+  font-size:60px;
+}
+#up, #down {
+  font-size:36px;
+  text-align:center;
+  line-height:36px;
+  width:102px;
+  display:block;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div id='slide'>
+  <a href="javascript:" id='up'>︿</a>
+  <div id='wrap' class="icon">
+    <ul>
+      <li>%</li>
+      <li>&</li>
+      <li>'</li>
+      <li>(</li>
+      <li>)</li>
+      <li>*</li>
+    </ul>
+  </div>
+  <a href="javascript:" id="down">﹀</a>
+</div>
+</body>
+<script>
+(function(){
+	var oUp = document.getElementById("up");
+	var oDown = document.getElementById("down");
+	var oWrap = document.getElementById('wrap');
+	var oUl = oWrap.getElementsByTagName("ul")[0];
+	var aLi = oWrap.getElementsByTagName("li");
+	var timer = null;
+	var iSpeed = 30;
+	var toggle = 1;
+	var iNum = 5;
+	oUl.innerHTML += oUl.innerHTML;
+	var iUlHeight = oUl.offsetHeight;
+	oUp.onclick = function()
+	{
+		toggle = -1;
+		autoPlay();
+	};
+	oDown.onclick = function()
+	{
+		toggle = 1;
+		autoPlay();
+	};
+	function autoPlay()
+	{
+		if(timer)clearInterval(timer);
+		timer = setInterval(function(){
+			iNum += 2*toggle;
+			if(iNum < -iUlHeight/2)
+			{
+				iNum = 0;
+			}else if(iNum > 0)
+			{
+				iNum = -iUlHeight/2;
+			}
+			oUl.style.top = iNum +'px';
+		},iSpeed)
+		
+	}
+	autoPlay();
+})()
+</script>
+</html>

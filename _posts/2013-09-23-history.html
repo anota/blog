@@ -1,0 +1,50 @@
+---
+title:history.pushState的使用
+---
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>history</title>
+</head>
+<body>
+	<div></div>
+	<button>35选7</button>
+</body>
+	<script>
+
+	//history pushState()
+	//onpopstate
+	window.onload = function(){
+		var oDiv = document.getElementsByTagName("div")[0];
+		var oBtn = document.getElementsByTagName("button")[0];
+
+		var iNow = 1;
+
+		oBtn.onclick = function(){
+			var number = randomNum(35,7);
+			oDiv.innerHTML = number;
+
+			history.pushState(number,'',iNow++);
+
+		}
+
+		window.onpopstate = function(ev){
+			var number = ev.state || "";
+			oDiv.innerHTML = number;
+		}
+
+		function randomNum(arrs,now){
+
+			var newArr = [];
+
+			for(var i = 0;i<now;i++)
+			{
+				newArr.push(Math.floor(Math.random() * arrs));
+			}
+
+			return newArr;
+		}
+	}
+	</script>
+</html>

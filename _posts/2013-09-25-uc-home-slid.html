@@ -1,0 +1,366 @@
+---
+title:UC官网幻灯片
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>UC官网幻灯片</title>
+	<style type="text/css">
+	div,body,ul,li{
+		margin:0;
+		padding: 0;
+	}
+	ul,li{
+		list-style: none;
+	}
+	#imageShow{
+		border-top: 2px solid #f60;
+		border-bottom: 1px solid #fff;
+		position:relative;
+		z-index: 3;
+	}
+	.imagebg{
+		height: 400px;
+		overflow: hidden;
+		position: relative;
+	}
+	.imagebg li{
+		height: 400px;
+		display: none;
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		cursor: pointer;
+	}
+	.imagebg .bannerBg1{
+		width: 50%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 400px;
+	}
+	.imagebg .bannerBg2{
+		width: 50%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 400px;
+	}
+	.imagebg .bannerBg-main{
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		height: 400px;
+	}
+	.scrollBg{
+		height: 80px;
+		background: #f4f4f4 url({{site.base.url}}/images/post/2013-09-25/scroll_bg.png) 0 100% repeat-x;
+		position: relative;
+	}
+	.scrollBg .scroll{
+		margin: 0 auto;
+		width: 960px;
+		height: 76px;
+		position: relative;
+	}
+	.out-scroll-pic{
+		height: 76px;
+		margin-left: 70px;
+		overflow: hidden;
+		position: relative;
+		width: 822px;
+		top: 2px;
+	}
+	.scroll-pic{
+		margin: 0 auto;
+		width: 40000px;
+		height: 76px;
+		position: absolute;
+		left: 0;
+	}
+	.scroll-pic li{
+		float: left;
+		height: 65px;
+		width: 145px;
+		margin: 5px 9px;
+		cursor: pointer;
+		background: #000;
+	}
+	.scroll-pic img{
+		filter: alpha(opacity=70);
+		-moz-opacity: 0.7;
+		opacity: 0.7;
+	}
+	.scroll-pic .on img{
+		filter: alpha(opacity=100);
+		-moz-opacity: 1;
+		opacity: 1;
+	}
+	.out-scroll-pic .current{
+		width: 144px;
+		height: 65px;
+		border: 2px #ff780d solid;
+		background: url({{site.base.url}}/images/post/2013-09-25/arrow_on.png) 50% -4px no-repeat;
+		z-index: 10;
+		position: absolute;
+		top: 3px;
+	}
+	#left_img_btn{
+		display: block;
+		width: 48px;
+		height: 76px;
+		position: absolute;
+		background: url({{site.base.url}}/images/post/2013-09-25/arrow_l.png);
+		top: 4px;
+		left: 0;
+	}
+	#left_img_btn:hover{
+		background: url({{site.base.url}}/images/post/2013-09-25/arrow_l_on.png);
+	}
+	#right_img_btn{
+		display: block;
+		width: 48px;
+		height: 76px;
+		position: absolute;
+		background: url({{site.base.url}}/images/post/2013-09-25/arrow_r.png);
+		top: 4px;
+		right: 0;
+	}
+	#right_img_btn:hover{
+		background: url({{site.base.url}}/images/post/2013-09-25/arrow_r_on.png);
+	}
+	</style>
+</head>
+<body>
+	<div id="imageShow">
+		<ul class="imagebg" id="imagebg">
+			<li style="display:block;opacity: 1;filter:alpha(opacity:100);">
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic1.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic2.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic3.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic4.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic5.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic6.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic7.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+			<li>
+				<div class="bannerBg1"></div>
+				<div class="bannerBg2"></div>
+				<a class="bannerBg-main" style="background:url({{site.base.url}}/images/post/2013-09-25/big/pic8.jpg) no-repeat center center #4a9ee8;"></a>
+			</li>
+		</ul>
+		<div class="scrollBg">
+			<div class="scroll">
+				<div class="out-scroll-pic">
+					<ul class="scroll-pic" id="small_pic">
+						<li class='on'><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (1).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (2).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (3).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (4).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (5).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (6).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (7).jpg"></li>
+						<li><img src="{{site.base.url}}/images/post/2013-09-25/small/icon (8).jpg"></li>
+					</ul>
+					<span class="current" id="current" style='left:7px;'></span>
+				</div>
+				<a href="#" id="left_img_btn"></a>
+				<a href="#" id="right_img_btn"></a>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src='http://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<script type="text/javascript">
+	/**
+	 * jQuery插件开发
+	 */
+	(function($){
+		$.fn.slide = function(opt)
+		{
+			var defaults = {
+				$icon_wrap:$('#small_pic'),
+				$pic_wrap:$('#imagebg'),
+				$current: $('#current'),
+				$btn_left:$('#left_img_btn'),
+				$btn_right:$('#right_img_btn'),
+				iVisible:5,
+				iCurrentBorder:2
+			};
+			var opt = $.extend(defaults,opt);
+			//初始化
+			var $this = $(this);
+			var iCurrentBorder = opt.iCurrentBorder;
+			var $picsLi = opt.$pic_wrap.find('li');
+			var iPics = $picsLi.length;
+			//小图的html
+			var sIconHtml = opt.$icon_wrap.html();
+			//初始化小图位置
+			opt.$current.css('left',iIConMargin-iCurrentBorder+'px');
+			opt.$icon_wrap.append(sIconHtml+sIconHtml);
+			var $iconWrapLi = opt.$icon_wrap.find('li');
+			var iIconWidth = $iconWrapLi.outerWidth(true);
+			var iIConMargin = parseInt($iconWrapLi.css('margin-left'));
+			opt.$icon_wrap.width(iIconWidth*($iconWrapLi.length)+'px');
+			var iMinPos = -iIconWidth * iPics;
+			opt.$icon_wrap.css('left',iMinPos);
+
+			//添加事件
+			var iCurIndex = 0;
+			var iToggle = 1;
+			var iIconMoveIndex = 0;
+			var iIndex = 0;
+			var iLast = 0;
+			//左边按钮
+			opt.$btn_left.click(function(){
+				if(! $this.attr('dis'))
+				{
+					if(iCurIndex){
+						iCurIndex--;
+						Ui.fnCurrent();
+					}else{
+						iToggle = 1;
+						Ui.fnIconMove();
+					};
+					//显示大图索引
+					iLast = iIndex;
+					iIndex--;
+					Ui.fnPicDis();
+				}			
+			})
+			//右边按钮
+			opt.$btn_right.click(function(){
+				Ui.fnAutoPlay();		
+			})
+			//小图标的点击
+			$iconWrapLi.click(function(){
+				var iCur = $iconWrapLi.index($(this));
+				iLast = iIndex;
+				iIndex = iCur % iPics;
+				Ui.fnPicDis();
+				//滑动框交互
+				var iParentPos = opt.$icon_wrap.parent().offset().left;
+				var iThisPos = $(this).offset().left - iParentPos;
+				iCurIndex = Math.floor(iThisPos/iIconWidth);
+				Ui.fnCurrent();
+			});
+			//自动播放
+			var oTimer = null;
+			oTimer = setInterval(function(){
+				Ui.fnAutoPlay();
+			},3000);
+			//移入清除播放
+			$this.bind('mouseover',function(){
+				clearInterval(oTimer);
+			});
+			$this[0].onmouseout = function(){
+				oTimer = setInterval(function(){
+					Ui.fnAutoPlay();
+				},3000);
+			};
+			//ui方法
+			var Ui = {};
+			var iMaxPos = -iIconWidth * (iPics*2-1);
+			Ui = {
+				//当前框移动
+				fnCurrent:function()
+				{
+					var iGo = (iIConMargin-iCurrentBorder) + iCurIndex*iIconWidth;
+					opt.$current.animate({'left' : iGo});						
+				},
+				//小图标移动
+				fnIconMove:function()
+				{
+					var iCurLeft = parseInt(opt.$icon_wrap.css('left'));
+					opt.$icon_wrap.animate({'left': iCurLeft + iIconWidth*iToggle},function(){
+						iCurLeft = parseInt(opt.$icon_wrap.css('left'));
+						//超出运行区域 重置
+						if(iCurLeft>iMinPos)
+						{
+							opt.$icon_wrap.css('left', iMaxPos);
+
+						}else if(iCurLeft < iMaxPos)
+						{
+							opt.$icon_wrap.css('left', iMinPos);
+						}
+					});
+				},
+				fnPicDis:function(){
+					if(iIndex<0)
+					{
+						iIndex = iPics-1;
+					}else if(iIndex >= iPics)
+					{
+						iIndex= 0;
+					}
+					if(iLast != iIndex)
+					{
+						$this.attr('dis','move');
+						$picsLi.eq(iLast).fadeOut();
+						$picsLi.eq(iIndex).fadeIn(function(){
+							$this.attr('dis','');
+						});
+					}
+					//小图标的透明与否
+					$iconWrapLi.removeClass('on');
+					$iconWrapLi.eq(iIndex).addClass('on');
+					$iconWrapLi.eq(iIndex+iPics).addClass('on');
+					$iconWrapLi.eq(iIndex+iPics*2).addClass('on');
+				},
+				fnAutoPlay:function(){
+					if(! $this.attr('dis'))
+					{
+						if(iCurIndex < opt.iVisible-1)
+						{
+							iCurIndex++;
+							Ui.fnCurrent();
+						}else{
+							iToggle = -1;
+							Ui.fnIconMove();
+						};
+						//显示大图索引
+						iLast = iIndex;
+						iIndex++;
+						Ui.fnPicDis();
+					}
+				}
+			}
+		}
+	})(jQuery)
+
+	//调用插件
+	$('#imageShow').slide({});
+	</script>
+</body>
+</html>
