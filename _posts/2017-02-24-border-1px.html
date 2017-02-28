@@ -1,0 +1,28 @@
+---
+title:视网膜屏1像素线条
+---
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+div{
+    width: 200px;
+    height: 200px;
+    position: relative;
+    line-height: 200px;
+}
+div:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid rgba(0, 0, 0, 1);
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 200%;
+    height: 200%;
+    -webkit-transform: scale(0.5);
+    transform: scale(0.5);
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+}
+</style>
+<div>我在视网膜屏能显示一像素</div>

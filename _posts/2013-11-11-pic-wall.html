@@ -1,0 +1,235 @@
+---
+title: 自由替换照片墙
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>无标题文档</title>
+	<style>
+@font-face {
+ font-family:'RaphaelIcons';
+ src:url('{{site.baseurl}}/font/raphaelicons-webfont.eot');
+ src:url('{{site.baseurl}}/font/raphaelicons-webfont.woff') format('woff'), url('{{site.baseurl}}/font/raphaelicons-webfont.ttf') format('truetype'), url('{{site.baseurl}}/font/raphaelicons-webfont.svg') format('svg');
+ font-weight:normal;
+ font-style:normal;
+}
+.icon {
+  font-weight:normal;
+  font-size:normal;
+  line-height:normal;
+  font-family:'RaphaelIcons';
+  font-size:1.1em;
+  position:relative;
+  top:0.1em;
+}
+body, ul, li, div {
+  margin:0;
+  padding:0;
+}
+body {
+  background:#000;
+  color:#eee;
+}
+ul, li {
+  list-style:none;
+}
+#icon {width:660px; position:relative; margin:10px auto;}
+#icon li {width:200px; height:150px; float:left; list-style:none; margin:10px; z-index:1;background: #333;
+font-size: 60px; text-align: center; line-height: 150px; cursor: pointer;}
+#icon .active {border:1px dashed #eee;}
+</style>
+</head>
+<body>
+	<ul class="icon" id="icon">
+		<li>%</li>
+		<li>&</li>
+		<li>'</li>
+		<li>(</li>
+		<li>)</li>
+		<li>*</li>
+		<li>d</li>
+		<li>e</li>
+		<li>f</li>
+	</ul>
+</body>
+	<script>
+window.onload = function(){
+
+  var oUl = document.getElementById("icon");
+  var aLi = oUl.getElementsByTagName("li");
+  var aPos = [];
+  var iMinZindex = 2;
+  var i = 0;
+
+  //布局转换
+  for(var i = 0; i<aLi.length;i++){
+  aPos[i]= {left:aLi[i].offsetLeft,top:aLi[i].offsetTop};
+  }
+
+  for(var i = 0;i<aLi.length;i++){
+  aLi[i].style.left = aPos[i].left + "px";
+  aLi[i].style.top = aPos[i].top + "px";
+
+  aLi[i].style.position = "absolute";
+  aLi[i].style.margin = "0";
+
+  aLi[i].index = i;
+  }
+
+  for(var i = 0;i<aLi.length;i++)
+  {
+  	setDarg(aLi[i]);
+  }
+
+function getStyle(obj,attr){
+	return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj,false)[attr];
+}
+
+function flexMove(obj,json,fn)
+{
+	//if(!obj.timer)obj.timer=null;
+	if(obj.timer)clearInterval(obj.timer);
+	obj.timer = setInterval(function(){
+		var bStop = true;
+		for(attr in json)
+		{
+			if(!obj.oSpeed)obj.oSpeed = {};
+			if(!obj.oSpeed[attr])obj.oSpeed[attr] = 0;
+			var iCur = parseInt(getStyle(obj,attr));
+			if(Math.abs(obj.oSpeed)[attr]>1 || Math.abs(json[attr]- iCur)>1)
+			{
+				bStop = false;
+				obj.oSpeed[attr] += (json[attr] - iCur)/5;
+				obj.oSpeed[attr] *= 0.7;
+				obj.style[attr] = iCur + obj.oSpeed[attr] + 'px';
+			}else
+			{
+				obj.oSpeed[attr] = 0;
+				obj.style[attr] = json[attr] + 'px';
+			};
+		};
+		if(bStop)
+		{
+			clearInterval(obj.timer);
+			obj.timer = null;
+			if(fn)fn.call(obj);
+		};
+	},30);			
+}	
+
+  function setDarg(obj){
+	obj.onmousedown = function(ev){
+		var oEvent = ev || event;
+
+		obj.style.zIndex = iMinZindex++;
+
+		var disX = oEvent.clientX - obj.offsetLeft;
+		var disY = oEvent.clientY - obj.offsetTop;
+
+		document.onmousemove = function(ev){
+			var oEvent = ev || event;
+
+			obj.style.left = oEvent.clientX - disX + "px";
+			obj.style.top = oEvent.clientY - disY + "px";
+
+			for(var i = 0;i< aLi.length;i++)
+			{
+			  aLi[i].className = "";
+			}
+
+			var oNear = findNearest(obj);
+
+			if(oNear){
+			  oNear.className = "active";
+			};
+			return false;
+		}
+
+		document.onmouseup = function(){
+			document.onmousemove = null;
+			document.onmouseup = null;
+
+			var oNear = findNearest(obj);
+			//console.log(oNear);
+			if(oNear)
+			{
+
+			  oNear.className = "";
+
+			  oNear.style.zIndex = iMinZindex++;
+			  obj.style.zIndex = iMinZindex++;
+
+			  flexMove(oNear,aPos[obj.index]);
+			  flexMove(obj,aPos[oNear.index]);
+
+			  var tmp = 0;
+
+			  tmp = obj.index;
+			  obj.index = oNear.index;
+			  oNear.index = tmp;
+
+			}else{
+
+			  flexMove(obj,aPos[obj.index]);
+			}
+		}
+
+		clearInterval(obj.timer);
+		return false;
+	}
+}
+
+  //碰撞检测
+  function cdTest(obj1,obj2){
+
+	var l1 = obj1.offsetLeft;
+	var r1 = obj1.offsetLeft + obj1.offsetWidth;
+	var t1 = obj1.offsetTop;
+	var b1= obj1.offsetTop + obj1.offsetHeight;
+
+	var l2 = obj2.offsetLeft;
+	var r2 = obj2.offsetLeft + obj2.offsetWidth;
+	var t2 = obj2.offsetTop;
+	var b2 = obj2.offsetTop + obj2.offsetHeight;
+
+	if(r1<l2 || l1>r2 || b1 < t2 || t1 >b2){
+	  return false;
+	}else{
+	  return true;
+	}
+  }
+
+  function getDis(obj1,obj2){
+	var a = obj1.offsetLeft - obj2.offsetLeft;
+	var b = obj1.offsetTop - obj2.offsetTop;
+	return Math.sqrt(a*a + b*b);
+  }
+
+  function findNearest(obj){
+	var iMin = 99999999999999;
+	var iMinIndex = -1;
+
+	for(var i = 0; i<aLi.length;i++){
+	  if(obj == aLi[i])continue;
+
+	  if(cdTest(obj,aLi[i])){
+		var dis = getDis(obj,aLi[i]);
+
+		if(iMin > dis){
+		  iMin = dis;
+		  iMinIndex = i;
+		}
+	  }
+	}
+
+	if(iMinIndex == -1){
+	  return null;
+	}else{
+	  return aLi[iMinIndex];
+	}
+  }
+}
+</script>
+</html>
