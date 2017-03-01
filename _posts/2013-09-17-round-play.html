@@ -1,0 +1,298 @@
+﻿---
+title: 无限循环幻灯片
+---
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style>
+* {
+  margin:0;
+  padding:0;
+}
+body {
+  background:#000;
+}
+li {
+  list-style:none;
+}
+#player {
+  min-width:1000px; 
+  margin-top:50px;
+  height:488px;
+  overflow:hidden;
+  position:relative;
+  _zoom:1;
+}
+#player ul {
+  position:absolute;
+  left:0;
+}
+#player li {
+  float:left;
+  text-align:center;
+  position:relative;
+  left:0;
+}
+#player li a {
+  display:block;
+  width:900px;
+  border:4px solid #fff;
+  height:480px;
+  overflow:hidden;
+  margin:0 auto;
+}
+#player img {
+  width:900px;
+}
+#player p {
+  position:absolute;
+  width:100%;
+  text-align:center;
+  bottom:2px;
+}
+#index a {
+  cursor:pointer;
+  display:inline-block;
+  overflow:hidden;
+  width:12px;
+  height:12px;
+  background:#fff;
+  border-radius:10px;
+  margin:0 4px;
+}
+#index a.on {
+  background:#ff6600;
+}
+#index a:hover {
+  background:#ff6600;
+}
+*html .ie6_out{ margin-left:1000px; zoom:1;}
+*html .ie6_in{ position:relative; float:left; margin-left:-1000px;}
+</style>
+</head>
+<body>
+<!--[if lte IE 6]>
+<div class="ie6_out">
+<div class="ie6_in">
+<![endif]-->
+<div id="player">
+  <ul>
+    <li>
+      <a href="#"><img src="{{site.baseurl}}/images/post/2013-09-17/1.jpg" /></a>
+    </li>
+    <li>
+      <a href="#"><img src="{{site.baseurl}}/images/post/2013-09-17/2.jpg" /></a>
+    </li>
+    <li>
+      <a href="#"><img src="{{site.baseurl}}/images/post/2013-09-17/3.jpg" /></a>
+    </li>
+  </ul>
+  <p id="index">
+    <a href="javascript:" class="on"></a>
+    <a href="javascript:"></a>
+    <a href="javascript:"></a>
+  </p>
+</div>
+<!--[if lte IE 6]>
+</div>
+</div>
+<![endif]-->
+<script>
+/*
+ * weibi:anota_Ju
+ * name : 传说中的轮播图
+ * 实现原理：
+ * 1.建立面向对象的各种(get：获取各种需要的对象 player：轮播图面向对象 move：让物体运动的面向对象)
+ * 2.让轮播图到了最后一张自动播放的时候让第一张转移到最好
+ * 3.当自动播放轮播图的时候
+ */ 
+(function(){
+	//创建构造函数
+	function Player(){};
+	Player.prototype = {
+		init:function(opt)
+		{	
+			var _this = this;
+			this.oPlay = opt.oPlay || document.getElementById("player");
+			this.oUl = opt.oUl||this.oPlay.getElementsByTagName("ul")[0];
+			this.aLi = opt.aLi||this.oUl.getElementsByTagName('li');
+			//this.aImg= opt.aImg||this.oUl.getElementsByTagName('img');
+			this.oIndex = opt.oIndex || document.getElementById("index");
+			this.aA = opt.aA || this.oIndex.getElementsByTagName("a");
+			
+			this.iNow = 0;
+			this.iNow2 = 0;			
+			//要执行的
+			this.toReSize();
+			this.toIndex();
+			this.timer = setInterval(function(){_this.autoPlay(_this)},3000);
+			window.onresize = function()
+			{
+				_this.toReSize();
+			};
+			
+			//startMove(document);
+		},
+		//重置屏幕以及初始化
+		toReSize:function()
+		{
+			this.winWidth = document.documentElement.scrollWidth || document.body.scrollWidth;
+			this.oUl.style.width = this.winWidth  * this.aLi.length + 'px';
+			this.oUl.style.left = -this.winWidth  * this.iNow + 'px';
+			for(var i =0;i<this.aLi.length;i++)
+			{
+				this.aLi[i].style.width = this.winWidth + 'px';
+			};
+		},
+		//点击运动
+		toIndex:function()
+		{
+			var _this = this;
+			this.oIndex.onclick = function(e)
+			{
+				var oEv = e || event;
+				var target = oEv.srcElement || oEv.target;
+				if(target.nodeName.toLowerCase() == 'a')
+				{
+					_this.aA[_this.iNow].className = '';
+					target.className = 'on';
+					//让oUL运动
+					move.flex(_this.oUl,{left:-get.index(target)*_this.winWidth});
+					//改变iNow
+					_this.iNow = get.index(target);
+					_this.iNow2 = get.index(target);
+					//清除自动播放的各种影响
+					_this.aLi[0].style.position = 'static';
+					_this.aLi[0].style.left = 0;
+					clearInterval(_this.timer)
+					_this.timer = setInterval(function(){_this.autoPlay(_this)},3000);
+				}
+			};
+		},
+		autoPlay:function(_this)
+		{
+			//console.log(_this.iNow)
+			if(_this.iNow == _this.aLi.length -1)
+			{
+				_this.aLi[0].style.position = 'relative';
+				_this.aLi[0].style.left = _this.aLi.length * _this.winWidth + 'px';
+				_this.aA[_this.iNow].className = '';
+				_this.iNow = 0;
+			}
+			else
+			{
+				_this.aA[_this.iNow].className = '';
+				_this.iNow++;
+			};
+			_this.iNow2++
+			_this.aA[_this.iNow].className = 'on';
+			move.buffer(_this.oUl,{left: - _this.iNow2 * _this.winWidth},function()
+			{
+				if(_this.iNow == 0)
+				{
+					_this.aLi[0].style.position = 'static';
+					_this.aLi[0].style.left = 0;
+					_this.oUl.style.left = 0;
+					_this.iNow2 = 0;
+				};
+			});
+		}
+	};
+	
+	
+	//各种运动
+	var move = {
+		buffer:function(obj,json,fn)
+		{
+			//if(!obj.timer)obj.timer=null;
+			if(obj.timer)clearInterval(obj.timer);
+			obj.timer = setInterval(function(){
+				var bStop = true;
+				for(attr in json)
+				{
+					if(!obj.oSpeed)obj.oSpeed= {};
+					if(!obj.oSpeed[attr])obj.oSpeed[attr] = 0;
+					var iCur = parseInt(get.style(obj,attr));
+					//console.log(iCur)
+					if(json[attr]!= iCur)
+					{
+						bStop = false;
+						obj.oSpeed[attr] = (json[attr] - iCur)/8;
+						obj.oSpeed[attr] = obj.oSpeed[attr] > 0 ? Math.ceil(obj.oSpeed[attr]) : Math.floor(obj.oSpeed[attr]);
+						obj.style[attr] = iCur + obj.oSpeed[attr] + 'px';
+					};
+				};
+				if(bStop)
+				{
+					clearInterval(obj.timer);
+					obj.timer = null;
+					if(fn)fn.call(obj);
+				}
+			},30);
+		},
+		flex:function(obj,json,fn)
+		{
+			//if(!obj.timer)obj.timer=null;
+			if(obj.timer)clearInterval(obj.timer);
+			obj.timer = setInterval(function(){
+				var bStop = true;
+				for(attr in json)
+				{
+					if(!obj.oSpeed)obj.oSpeed = {};
+					if(!obj.oSpeed[attr])obj.oSpeed[attr] = 0;
+					var iCur = parseInt(get.style(obj,attr));
+					if(Math.abs(obj.oSpeed)[attr]>1 || Math.abs(json[attr]- iCur)>1)
+					{
+						bStop = false;
+						obj.oSpeed[attr] += (json[attr] - iCur)/5;
+						obj.oSpeed[attr] *= 0.7;
+						obj.style[attr] = iCur + obj.oSpeed[attr] + 'px';
+					}else
+					{
+						obj.oSpeed[attr] = 0;
+						obj.style[attr] = json[attr] + 'px';
+					};
+				};
+				if(bStop)
+				{
+					clearInterval(obj.timer);
+					obj.timer = null;
+					if(fn)fn.call(obj);
+				};
+			},30);			
+		}		
+	};
+	//各种获取
+	var get = {
+		style:function(obj,attr)
+		{
+			return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj,false)[attr];	
+		},
+		tag:function(oParent,sTag)
+		{
+			return oParent.getElementsByTagName(sTag);
+		},
+		id:function(id)
+		{
+			return document.getElementById(id);
+		},
+		index:function(obj)
+		{
+			var aChild = obj.parentNode.children;
+			for(var i=0;i<aChild.length;i++)
+			{
+				if(aChild[i]==obj)return i;
+			}
+		}
+	};	
+	
+	//创建轮播图对象
+	var p = new Player();
+    p.init({});
+	
+})()
+</script>
+</body>
+</html>
