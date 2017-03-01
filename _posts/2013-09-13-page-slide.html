@@ -1,0 +1,441 @@
+---
+title: 照片墙翻页
+---
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Hello,Anota</title>
+	<style>
+		div,
+		ul,
+		li,
+		body,
+		html {
+			margin: 0;
+			padding: 0
+		}
+
+		ul,
+		li {
+			list-style: none
+		}
+
+		body {
+			background: #000;
+			font-size: 14px
+		}
+
+		html,
+		body {
+			height: 100%
+		}
+
+		.course-wrap {
+			position: relative;
+			left: 0;
+			top: 0;
+			width: 750px;
+			height: 300px;
+			margin: 0 auto 0 auto;
+			padding: 150px 0 0
+		}
+
+		ul {
+			width: 750px;
+			height: 300px;
+			position: relative;
+			left: 0;
+			top: 0
+		}
+
+		li {
+			width: 150px;
+			height: 150px;
+			float: left
+		}
+
+		li a {
+			display: block;
+			margin: 10px;
+			width: 130px;
+			height: 130px;
+			border: 1px solid #444;
+			color: #444;
+			text-align: center;
+			line-height: 130px
+		}
+
+		li a:hover {
+			border: 1px solid #999;
+			color: #999
+		}
+
+		li a:active {
+			border: 1px solid #ccc;
+			color: #ccc
+		}
+
+		li img {
+			display: block
+		}
+
+		.page {
+			width: 750px;
+			margin: 40px auto 0;
+			text-align: center;
+			font-size: 0
+		}
+
+		.page a {
+			color: #444;
+			display: inline-block;
+			font-size: 14px;
+			width: 20px;
+			height: 20px;
+			line-height: 22px;
+			border: 1px solid #444;
+			margin: 5px
+		}
+
+		.page a:hover {
+			text-decoration: none;
+			color: #999;
+			background: #333
+		}
+
+		.page a:active,
+		.page a.on {
+			background: #000;
+			color: #ccc
+		}
+
+		.footer {
+			position: absolute;
+			width: 100%;
+			left: 0;
+			bottom: 40px;
+			text-align: center;
+			color: #444
+		}
+
+		.footer a {
+			color: #444
+		}
+
+		.footer a:hover {
+			color: #eee
+		}
+
+		.footer a:active {
+			color: #fff
+		}
+
+		.box {
+			width: 100px;
+			height: 100px;
+			border: 1px solid #ccc;
+			position: absolute
+		}
+	</style>
+</head>
+
+<body>
+	<div class="course-wrap">
+		<ul id="boxes"></ul>
+	</div>
+	<div class="page" id="page"></div>
+	<div class="footer">by<a href="http://weibo.com/aballam">@Anota_Ju</a></div>
+	<script>
+	var tool = {};
+
+	tool.getStyle = function (obj, attr) {
+		return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, false)[attr];
+	}
+
+	var ui = {};
+
+	ui.bufferMove = function (obj, json, endFn) {
+
+		clearInterval(obj.timer);
+
+		obj.timer = setInterval(function () {
+
+			var bBtn = true;
+
+			for (var attr in json) {
+
+				var iCur = 0;
+
+				if (attr == "opacity") {
+					if (Math.round(parseFloat(tool.getStyle(obj, attr)) * 100) == 0) {
+						iCur = Math.round(parseFloat(tool.getStyle(obj, attr)) * 100)
+					} else {
+						iCur = Math.round(parseFloat(tool.getStyle(obj, attr)) * 100) || 100;
+					}
+				} else {
+					iCur = parseInt(tool.getStyle(obj, attr)) || 0;
+				}
+
+				var iSpeed = (json[attr] - iCur) / 3;
+				iSpeed = iSpeed > 0 ? Math.ceil(iSpeed) : Math.floor(iSpeed);
+
+				if (iCur != json[attr]) {
+					bBtn = false;
+				}
+				if (attr == "opacity") {
+					obj.style.filter = "alpha(opacity=" + (iCur + iSpeed) + ")";
+					obj.style.opacity = (iCur + iSpeed) / 100;
+				} else {
+					obj.style[attr] = iCur + iSpeed + "px";
+				}
+			}
+
+			if (bBtn) {
+				clearInterval(obj.timer);
+				if (endFn) {
+					endFn.call(obj);
+				}
+			}
+
+		}, 30);
+	};
+
+	ui.page = function (opt) {
+		if (!opt.obj) {
+			return false
+		};
+
+		var obj = opt.obj;
+		var nowNum = opt.nowNum || 1;
+		var allNum = opt.allNum || 5;
+		var callBack = opt.callBack || function () {};
+
+		if (nowNum >= 4 && allNum >= 6) {
+			var oA = document.createElement("a");
+			oA.href = "#1";
+			oA.innerHTML = "首页";
+			obj.appendChild(oA);
+		}
+		if (nowNum >= 2) {
+			var oA = document.createElement("a");
+			oA.href = "#" + (nowNum - 1);
+			oA.innerHTML = "<";
+			obj.appendChild(oA);
+		} else {
+			var oA = document.createElement("a");
+			oA.innerHTML = "<";
+			obj.appendChild(oA);
+		}
+
+		if (allNum <= 5) {
+			for (var i = 1; i <= allNum; i++) {
+				var oA = document.createElement("a");
+
+
+				if (nowNum == i) {
+					oA.innerHTML = i;
+					oA.className = "on";
+				} else {
+					oA.href = "#" + i;
+					oA.innerHTML = i;
+				}
+				obj.appendChild(oA);
+			}
+		} else {
+			for (var i = 1; i <= 5; i++) {
+				var oA = document.createElement("a");
+
+				if (nowNum == 1 || nowNum == 2) {
+
+					if (nowNum == i) {
+						oA.innerHTML = i;
+						oA.className = "on";
+					} else {
+						oA.href = "#" + i;
+						oA.innerHTML = i;
+					}
+
+				} else if ((allNum - nowNum) == 0 || (allNum - nowNum) == 1) {
+
+
+					oA.href = '#' + (allNum - 5 + i);
+
+					if ((allNum - nowNum) == 0 && i == 5) {
+						oA.innerHTML = (allNum - 5 + i);
+						oA.className = "on";
+					} else if ((allNum - nowNum) == 1 && i == 4) {
+						oA.innerHTML = (allNum - 5 + i);
+						oA.className = "on";
+					} else {
+						oA.innerHTML = (allNum - 5 + i);
+						oA.className = "on";
+					}
+				} else {
+
+					if (i == 3) {
+						oA.innerHTML = (nowNum - 3 + i);
+						oA.className = "on";
+					} else {
+						oA.href = "#" + (nowNum - 3 + i);
+						oA.innerHTML = (nowNum - 3 + i);
+					}
+				}
+				obj.appendChild(oA);
+			}
+		}
+		if ((allNum - nowNum) >= 1) {
+			var oA = document.createElement('a');
+			oA.href = "#" + (nowNum + 1);
+			oA.innerHTML = ">";
+			obj.appendChild(oA);
+		} else {
+			var oA = document.createElement('a');
+			oA.innerHTML = ">";
+			obj.appendChild(oA);
+		}
+
+		if ((allNum - nowNum) >= 3 && allNum >= 6) {
+			var oA = document.createElement("a");
+			oA.href = "#" + allNum;
+			oA.innerHTML = "尾页";
+			obj.appendChild(oA);
+		}
+
+		callBack(nowNum, allNum);
+
+		var aA = obj.getElementsByTagName("a");
+
+		for (var i = 0; i < aA.length; i++) {
+			aA[i].onclick = function () {
+				var nowNum = parseInt(this.getAttribute("href").substring(1));
+				obj.innerHTML = "";
+				ui.page({
+					obj: opt.obj,
+					nowNum: nowNum,
+					allNum: allNum,
+					callBack: callBack
+				});
+				return false;
+			}
+		}
+	}
+
+	var json = {
+		title: [
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+			'7',
+			'8',
+			'9',
+			'10',
+			'11',
+			'12',
+			'13',
+			'14',
+			'15',
+			'16',
+			'17',
+			'18',
+			'19',
+			'20',
+			'21',
+			'22',
+			'23',
+			'24',
+			'25',
+			'26',
+			'27',
+			'28',
+			'29',
+			'30',
+			'31',
+			'32',
+			'33',
+			'34'
+		]
+	};
+
+	var arr = [];
+	var iNow = 9;
+	var allNum = Math.ceil(json.title.length / 10);
+	var obj = document.getElementById("page");
+	ui.page({
+		obj: obj,
+		nowNum: 1,
+		allNum: allNum,
+		callBack: moveBox
+	});
+
+	function moveBox(now, all) {
+		var num = now * 10 < json.title.length ? 10 : json.title.length - (now - 1) * 10;
+		var oUl = document.getElementById("boxes");
+		var aLi = oUl.getElementsByTagName("li");
+		var aA = oUl.getElementsByTagName("a");
+
+		//crate Elements
+		if (oUl.innerHTML == "") {
+			for (var i = 0; i < num; i++) {
+				var oA = document.createElement("a");
+				var oLi = document.createElement("li");
+				oA.innerHTML = json.title[(now - 1) * 10 + i];
+				oLi.appendChild(oA);
+				oUl.appendChild(oLi);
+			}
+
+			for (var i = 0; i < aLi.length; i++) {
+				arr.push([aLi[i].offsetLeft, aLi[i].offsetTop]);
+			}
+
+			for (var i = 0; i < aLi.length; i++) {
+				aLi[i].style.position = "absolute";
+				aLi[i].style.left = arr[i][0] + 'px';
+				aLi[i].style.top = arr[i][1] + 'px';
+				aLi[i].style.margin = 0;
+			}
+
+		} else {
+			var timer = setInterval(function () {
+				ui.bufferMove(aLi[iNow], {
+					left: 300,
+					top: 300,
+					opacity: 0
+				});
+
+				if (iNow == 0) {
+					clearInterval(timer);
+
+					iNow = num - 1;
+
+					for (var i = 0; i < num; i++) {
+						aA[i].innerHTML = json.title[(now - 1) * 10 + i];
+					}
+					var timer2 = setInterval(function () {
+
+						ui.bufferMove(aLi[iNow], {
+							left: arr[iNow][0],
+							top: arr[iNow][1],
+							opacity: 100
+						});
+
+						if (iNow == 0) {
+							clearInterval(timer2);
+							iNow = num - 1;
+						} else {
+							iNow--;
+						}
+					}, 100);
+				} else {
+					iNow--;
+				}
+			}, 100);
+		}
+	}
+</script>
+</body>
+</html>
