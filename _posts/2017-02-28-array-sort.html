@@ -1,0 +1,77 @@
+--- title: 两个有序数组合并为一个有序数组 ---
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>quick sort</title>
+	<style>
+		div {
+			padding: 5px;
+			border: 1px solid #000;
+			display: inline-block;
+			font-size: 14px;
+			text-align: center;
+			cursor: pointer;
+		}
+
+		input {
+			margin-top: 10px;
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+	<div>click me</div>
+	<input value="1,2,3,4,5,6" size="100" type="text" />
+	<input value="2,3,4,5,9" size="100" type="text" />
+	<script>
+		function mergeList(a, b) {
+			var result = [];
+			var i = 0;
+			var j = 0;
+			var k = 0;
+
+			while (i < a.length && j < b.length) {
+				if (a[i] <= b[j]) {
+					result[k++] = a[i++];
+				} else {
+					result[k++] = b[j++];
+				}
+			}
+
+			//后面连个while循环是用来保证两个数组比较完之后剩下的一个数组里的元素能顺利传入
+			while (i < a.length) {
+				result[k++] = a[i++];
+			}
+
+			while (j < b.length) {
+				result[k++] = b[j++];
+			}
+
+			console.log("result");
+			console.log(result);
+			return result;
+		};
+
+		;
+
+		document.onclick = function () {
+			const oDiv = document.getElementsByTagName("div")[0];
+			const oInput1 = document.getElementsByTagName("input")[0];
+			const oInput2 = document.getElementsByTagName("input")[1];
+			let arr1 = oInput1.value.split(",");
+			let arr2 = oInput2.value.split(",");
+			arr1 = arr1.map(function (item) {
+				return parseInt(item);
+			})
+			arr2 = arr2.map(function (item) {
+				return parseInt(item);
+			})
+			oDiv.innerHTML = "" + mergeList(arr1,arr2);
+		}
+	</script>
+</body>
+
+</html>
