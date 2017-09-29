@@ -1,0 +1,53 @@
+--- title: ES6：for of、arr.keys、arr.entries、数组推导---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    "user strict"
+    var arr = [1, 2, 3, 4, 5];
+    var str = "anota";
+    var obj = {
+        a: 1,
+        b: 2,
+        c: 3
+    };
+    for (var value of arr) {
+        console.log(value);
+    }
+    for (var value of str) {
+        console.log(value);
+    }
+    //obj不存在遍历器
+    // for (var value of obj) {
+    //     console.log(value);
+    // }
+
+    for (var key of arr.keys()) {
+        console.log(key)
+    }
+
+    for (var [key, value] of arr.entries()) {
+        console.log(key, value);
+    }
+
+    /*
+        数组推倒
+        ES6提供简洁写法，允许直接通过现在数组生成新数组，这种被称为数组推倒(array comprehension).
+    */
+    var arr2 = [
+        for (value of arr) value * 2
+    ];
+    console.log(arr2);
+</script>
+
+
+</html>

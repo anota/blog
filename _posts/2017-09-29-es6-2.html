@@ -1,0 +1,84 @@
+--- title: ES6：字符串扩展(formCodePoint,字符串模板，str.includes)---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    "user strict"
+    /*
+        字符串扩展
+    */
+    var s = "anota";
+    var s = '𠮷';
+    console.log(s.length);
+
+    console.log(s.charCodeAt(0));
+    console.log(s.charAt(0));
+
+    // 对四个字节的字符进行操作。
+    var str = "anota";
+    // console.log(str.at('n')); //返回对应位置字符
+    console.log(s.codePointAt(0)); //返回码点
+    console.log(String.fromCodePoint(134071)); //根据码点返回字符
+    console.log(s.repeat(10)); //复制s 10次
+
+    /*
+        模板字符串（template string）是增强版的字符串，用反引号(`)标识。
+        它可以当做普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。
+        
+        代码中的字符串用反引号标识，如果需要引入变量则使用${变量名}
+    */
+
+
+    var name = "anota";
+    var age = 19;
+    var str = `我的名字叫：${name} 我的年龄：${age + 1}`;
+    console.log(str);
+
+    /*
+        unicode表示法
+        "\u0061" a
+    */
+
+    console.log("\u0061");
+    console.log("\u{00061}");
+    console.log("\u{20BB7}");
+
+    /*
+        字符串方法：
+        
+        s.includes()
+        1、要查找的字符串
+        2、起始位置
+        返回布尔值，表示是否找到了参数字符串
+        
+        str.startsWith()
+        参数：
+            1、要查找的字符串
+            2、起始位置
+            返回布尔值，表示参数字符串是否在源头字符串头部。
+
+        str.endsWith()
+        参数：
+            1、要查找的字符串
+            2、起始位置（针对的是n个字符）
+            返回布尔值，表示参数字符串是否在元字符串的尾部。
+    */
+
+    var s = 'anota';
+    console.log(s.includes("d"));
+    console.log(s.startsWith("anot"));
+    console.log(s.endsWith("not", 4));
+</script>
+
+
+</html>

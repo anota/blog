@@ -1,0 +1,91 @@
+--- title: ES6：数值扩展(hypot)、数组扩展(Array.from、Array.of、arr.find、arr.fill)---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</body>
+<script>
+    "user strict"
+    var num = 0b11; //前面加 0b强制表示二进制
+    console.log(num);
+    var num = 0o11; //前面加 0o强制表示十六进制
+    console.log(num);
+
+    var num = 1.234;
+    console.log(Math.trunc(num)) //干掉小数点
+    console.log(Math.sign(-0)); //判断参数是正数还是负数 还是0 或 -0
+    console.log(Math.hypot(3, 4)) //返回所有参数的平方和的平方根（勾股定理）
+
+    var divs = document.getElementsByTagName("div");
+    console.log(divs);
+    var eles = Array.from(divs);
+    console.log(eles);
+    var str = "anota";
+    var arr = Array.from(str);
+    console.log(arr);
+
+    var arr = Array.of(1, 2, 3, 4, 54, 3); //Array.of()把参数转成数组,可用于创建数组
+    console.log(arr);
+    var arr = new Array(5); //这种方式创建数组 当一个参数时出bug
+    console.log(arr.length);
+    var arr = [];
+
+    /*
+        arr.find()
+        找出第一个符合条件的数组元素
+        参数：
+            1、回调函数
+            2、回调函数内this的指向
+        类似map，返回单个值，所有参数不符合返回underfined
+
+        arr.findIndex();
+        找出第一个符合条件的数组元素位置
+        参数：同上，返回单个值，所有参数不符合返回-1
+
+        arr.fill()
+        用来填充数组
+        参数：
+            1、填充内容
+            2、起始位置
+            3、结束位置
+    */
+
+    var arr = [1, 2, 3, 4, 54, 344];
+    var n = arr.find(function(value) {
+        return value > 4;
+    })
+    console.log(n);
+
+    var n = arr.findIndex(function(value) {
+        return value < 1;
+    })
+    console.log(n);
+
+    arr.fill(4, 2, 5);
+    console.log(arr);
+
+    arr.length = 10;
+    arr.fill(0); //便捷创建数组
+
+    console.log(arr);
+</script>
+
+
+</html>
