@@ -1,0 +1,84 @@
+---
+title: ES6：函数扩展(默认参数、多余参数、箭头函数)
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    "user strict"
+
+    function fn(a, b = 2, c) {
+        return {
+            a,
+            b
+        };
+    }
+    console.log(fn(1, 4));
+
+    function ajax(options) {
+        var obj = {
+            type: options.type || "get"
+        }
+    }
+
+    // ajax({})
+
+    function fn1(a, b, c, ...rest) {
+        console.log(rest);
+        // 用于获取函数的多余参数
+        // 注意：rest后面不能再有其他参数，否则会报错
+    }
+    fn1(1, 2, 34, 4, 543);
+
+    /*
+        扩展运算符（spread）是三个点。它好比rest参数的逆运算，将数组转成用都好分割的参数序列。该运算符主要用于函数调用。
+    */
+    var arr = [1, 2, 3, 4, 5, 6];
+    console.log(Math.max.apply(null, arr));
+    console.log(Math.max(1, 2, 3, 4, 5, 6));
+    console.log(Math.max(...arr));
+
+    var str = "iscool";
+    var arr = [...str];
+    console.log(arr);
+
+
+    /*
+        箭头函数：
+            用于作为回调函数使用。
+            1、函数体内的this对象，绑定定义时所在的对象，而不是调用是的对象。
+            2、不可用做构造函数，不可以使用new命令，否则会抛出错误
+            3、该函数体内不存在arguments。
+    */
+
+    var f = a => a + 1;
+
+    console.log(f(2));
+
+    var f = (a, b) => a + b;
+
+    console.log(f(2, 3));
+
+
+    var obj = {
+        f: (a, b) => a + b
+    }
+    console.log(obj.f(2, 5));
+
+    arr.sort(function(a, b) {
+        return a - b;
+    });
+    arr.sfot((a, b) => a - b);
+</script>
+
+
+</html>

@@ -1,5 +1,5 @@
---- 
-title: ES6：对象简易生成,对象的扩展(Proxy)
+---
+title: ES6：对象简易生成,对象的扩展(Proxy，__proto__，Object.observe,Object.keys,Reflect.ownKeys)
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +37,34 @@ title: ES6：对象简易生成,对象的扩展(Proxy)
 
     console.log(p1.a);
     // p1.a = 1000;
+
+    /*
+        隐式原型
+    */
+
+    var Person = function() {}
+
+    var obj = {
+        __proto__: Person
+    };
+    console.log(obj.prototype);
+
+    var obj = {
+        a: 1,
+        b: 2
+    };
+
+    function fn(a) {
+        console.log(a);
+    }
+
+    // Object.observe(obj, fn);
+    // obj.a = 3;
+    // console.log(obj.a);
+    // Object.unobserve(obj, fn);
+    // obj.a = 4;
+    console.log(Object.keys(obj));
+    console.log(Reflect.ownKeys(obj));
 </script>
 
 

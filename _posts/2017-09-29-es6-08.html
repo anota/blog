@@ -1,0 +1,123 @@
+---
+title: ES6：Set/WeakSet、Map/WeakMap
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    "user strict"
+    /*
+        set:
+            ES6提供了新的数据结构Set。它类似于数组，但是成员的值是唯一的。
+            Set是一个构造函数，可以传入一个数组初始化默认值。
+
+        set.size
+            Set的实例的成员个数（数组的长度）
+        set.add(value)
+            为Set的实例添加知
+        set.delete(value)
+            删除Set实例值
+        set.has(value)
+            判断传入的参数是否为set的成员
+        set.clear()    
+            清除set中的所有成员
+    */
+
+    var set = new Set([1, 2, 3, 4, 4, 5, 5]);
+    console.log(set.size);
+
+    set.add(6);
+    console.log(set);
+    set.delete(1);
+    console.log(set);
+    console.log(set.has(6));
+    set.clear();
+    console.log(set);
+
+    // Weakset
+    /*
+    WeakSet(list)
+        WeakSet结构与Set类似，也是不可以重复值的集合
+        WeakSet是一个构造函数，可以传入一个类似组初始化默认值
+        WeakSet的成员只能是对象不能为其他类型的值
+        WeakSet中的对象是弱引用，即垃圾回收机制不考虑WeakSet对该对象的引用
+        WeakSet是不可遍历的
+
+    ws.add(value)
+    ws.delete(value)
+    ws.has(value)
+    */
+
+    var obj = {
+        "name": "anota"
+    }
+
+    /*
+        Map()
+        ES6提供了map数据结构，它类似对象，也是键值对的集合，但是“键”的范围不限于字符串，各种类型的值（包括对象）都可以当做键。
+        Map也可以接受一个数组作为参数。该数组的成员是一个个表示键值对的数组。
+        例如：
+            [[key1,value1],[key2,value2]]
+
+        map.size
+        返回成员总数
+        map.get(key)
+        map.set(key,value)
+        map.has(key)
+        map.delete(key)
+        map.clear()
+    */
+
+    var map = new Map([
+        ["name", "anota"],
+        ["age", 19],
+        ["age", 21],
+        [obj, 23]
+    ]);
+
+    console.log(map);
+    map.set("sex", "male");
+
+    console.log(map.size);
+    console.log(map.get(obj));
+
+    var arr = [...map];
+    console.log(arr);
+
+    map.forEach(function(value, attr) {
+        console.log(arguments);
+    })
+
+    for (var key of map.keys()) {
+        console.log(key);
+    }
+
+    for (var value of map.values()) {
+        console.log(value);
+    }
+
+    for (var [key, value] of map.entries()) {
+        console.log(key, value);
+    }
+
+    /*
+        WeakMap()
+        WeakMap结构与Map结构基本类似，唯一的区别是它只接受对象作为键名（null除外），不接受原始类型的值作为键名，而且键名锁只想的对象，不计入垃圾回收机制。
+        WeakMap没有遍历方法
+        wm.get(key)
+        wm.set(key,value)
+        wm.has(key)
+        wm.delete(key)
+    */
+</script>
+
+</html>

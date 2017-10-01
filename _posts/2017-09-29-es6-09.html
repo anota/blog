@@ -1,0 +1,108 @@
+---
+title: ES6：遍历接口,Generator
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    "user strict"
+    var obj = {
+        a: 1,
+        b: 2,
+        c: 3
+    };
+
+    // for (var value of obj) {
+    //     console.log(value);
+    // };
+
+    /*
+        Symbol
+        ES6移入了一种新的原始数据类型Symbol，表示独一无二的ID。他通过Symbol函数生成。
+    */
+
+    var s1 = Symbol("test");
+    var s2 = Symbol("test");
+    console.log(s1 == s2);
+    console.log(typeof s1);
+
+    Object.prototype[Symbol.iterator] = function() {
+        var keys = Object.keys(this);
+        var _self = this;
+        var index = 0;
+        return {
+            next() {
+                if (index < keys.length) {
+                    return {
+                        value: _self[keys[index++]],
+                        done: false
+                    }
+                } else {
+                    return {
+                        value: undefined,
+                        done: true
+                    }
+                }
+            }
+        }
+    }
+
+    for (var value of obj) {
+        console.log(value);
+    }
+
+    /*
+        Generator
+    */
+
+    function* fn() {
+        yield 1;
+        yield 2;
+    }
+
+    var f = fn();
+    console.log(f);
+    console.log(f.next());
+    console.log(f.next());
+    console.log(f.next());
+
+
+    function* fn1(b) {
+        var a = yield 1;
+        console.log(a);
+        var c = yield b;
+        console.log(c)
+    }
+
+    var f1 = fn1(4);
+    console.log(f1.next());
+    console.log(f1.next(7));
+    console.log(f1.next(9));
+    // 1,7,4,9
+
+    function* fn2() {
+        for (var i = 0; i < 10; i++) {
+            yield i;
+        }
+    }
+
+    console.log("===============")
+    var f2 = fn2();
+    console.log(f2.next());
+    console.log(f2.next());
+    console.log(f2.next());
+    console.log(f2.next());
+    console.log(f2.next());
+    console.log(f2.next());
+</script>
+
+</html>

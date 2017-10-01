@@ -1,0 +1,56 @@
+---
+title: ES6：Class 
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script>
+    "user strict"
+    class Cat {
+        constructor(name) {
+            this.name = name;
+        }
+        getName() {
+            return this.name;
+        }
+    }
+
+    // var Cat = function(name) {
+    //     this.name = name;
+    // }
+    // Cat.prototype.getName = function() {
+    //     return this.name;
+    // }
+
+    /*
+        在constructor方向内，super指代父类的constructor方法；在其他方法内，super指代父类的同名方法。
+    */
+
+    class Momo extends Cat {
+        constructor(name, color) {
+            super(name);
+            this.color = color;
+        }
+        getColor() {
+            return this.color;
+        }
+    }
+
+    var c1 = new Cat("anota");
+    var m1 = new Momo("iscool", "yellow");
+
+    console.log(m1.getName());
+    console.log(m1.getColor())
+    console.log(c1.getName());
+</script>
+
+</html>
