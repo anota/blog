@@ -25,22 +25,92 @@ title: ES6：async
             }
     */
 
-    var ajax = function() {
-        return new Promise(function(resolve, reject) {
-            setTimeout(function() {
-                resolve("shift");
-            }, 2000);
-        })
+    {
+        var ajax = function() {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve("shift");
+                }, 2000);
+            })
+        }
+
+        async function fn() {
+            console.log("start");
+            let data = await ajax();
+            console.log(data);
+            return data;
+        }
+        fn();
     }
 
-    async function fn() {
-        console.log("start");
-        let data = await ajax();
-        console.log(data);
-        return data;
+    {
+        async function f() {
+          return 'hello world';
+        }
+
+        f().then(v => console.log(v))
     }
-    fn();
+
+    {
+
+        var showNum = function(num) {
+            return new Promise(function(resolve, reject) {
+                setTimeout(function() {
+                    resolve(num);
+                }, 2000);
+            })
+        }
+
+        async function fn2(){
+            console.log("start2");
+            const arr = [1,2,3,4,5,6,7,8,9];
+            // 注意任何函数体都要使用async，await命令只能用在async函数之中
+            // arr.forEach(async function(value){
+            //     let newNum = await showNum(value);
+            //     console.log(newNum);
+            // })
+            for (let value of arr) {
+                let num = await showNum(value);
+                console.log(num);
+            }
+        }
+        fn2();
+    }
+
+    {
+        // 同步处理：
+        // 写法一
+        // let [foo, bar] = await Promise.all([getFoo(), getBar()]);
+
+        // 写法二
+        // let fooPromise = getFoo();
+        // let barPromise = getBar();
+        // let foo = await fooPromise;
+        // let bar = await barPromise;
+    }
+
+    {
+        // 同步处理：
+        // async function dbFuc(db) {
+        //   let docs = [{}, {}, {}];
+        //   let promises = docs.map((doc) => db.post(doc));
+
+        //   let results = await Promise.all(promises);
+        //   console.log(results);
+        // }
+
+        // // 或者使用下面的写法
+
+        // async function dbFuc(db) {
+        //   let docs = [{}, {}, {}];
+        //   let promises = docs.map((doc) => db.post(doc));
+
+        //   let results = [];
+        //   for (let promise of promises) {
+        //     results.push(await promise);
+        //   }
+        //   console.log(results);
+        // }
+    }
 </script>
-
-
 </html>
