@@ -36,9 +36,14 @@ title: ES6：async
 
         async function fn() {
             console.log("start");
-            let data = await ajax();
-            console.log(data);
-            return data;
+            try{
+                let data = await ajax();
+                console.log(data);
+                return data;   
+            }catch(error){
+                console.log(error);
+            }
+            
         }
         fn();
     }
