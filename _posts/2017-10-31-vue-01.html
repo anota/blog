@@ -1,0 +1,136 @@
+--- 
+title: vue -> bind,class,html模板,template,render
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="{{site.baseurl}}/js/vue.js"></script>
+    <!-- <script src="../js/vue.js"></script> -->
+    <style>
+        .red {
+            color: red;
+        }
+        
+        .fontSize {
+            font-size: 20px;
+        }
+        
+        .bg {
+            background: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- bind简写v-bind -> :/{{}} -->
+    <!-- 事件绑定简写v-on - > @ -->
+    <div id="demo" :custom="abc" @click="clickHandle" class="fontSize" :class='{red:addClass}'>
+        {{message}}
+        <!-- 支持一行的运算 -->
+        <span>{{true ? "anota" : "no"}}</span>
+        <!-- 支持html -->
+        <div v-html="html"></div>
+    </div>
+    <div id="template"></div>
+    <div id="template2"></div>
+    <div id="template3"></div>
+    <div id="template4"></div>
+    <script type="x-template" id="temp">
+        <div>hello,anota,
+            <span>iscool</span>
+        </div>
+    </script>
+    <script>
+        const data = {
+            message: "hello,Vue!",
+            addClass: true,
+            abc: 1,
+            html: "<p>发现了吗？我是p标签</p>"
+        };
+
+        const str = `<div>hello,{{abc}},
+        <span>iscool</span>
+        </div>`; // es6的字符串模板支持换行
+
+        const vm = new Vue({
+            el: "#demo",
+            data,
+            methods: {
+                clickHandle() {
+                    console.log("click");
+                }
+            }
+        });
+        console.dir(vm.$data); // 获取数据,访问属性需要加$
+
+        // 设置template，会把el中的所有标签替换，包括标签目标本身
+        const vm2 = new Vue({
+            el: "#template",
+            data: {
+                "abc": "abc"
+            },
+            template: str
+        });
+
+        // 设置template，会把el中的所有标签替换，包括标签目标本身
+        const vm3 = new Vue({
+            el: "#template2",
+            data: {
+                "abc": "abc"
+            },
+            template: "#temp"
+        });
+
+        const vm4 = new Vue({
+            el: "#template3",
+            template: "#temp",
+            // render函数优先template，底层通过render函数创建虚拟dom，然后再渲染的
+            render(createElement) {
+                // createElement 三个参数 -> 标签，属性对象，子标签数组
+                return createElement(
+                    "ul", [
+                        createElement("li", 1),
+                        createElement("li", 2),
+                        createElement("li", 3)
+                    ])
+            }
+        });
+
+        const vm5 = new Vue({
+            el: "#template4",
+            render(createElement) {
+                const obj = createElement(
+                    "ul", {
+                        class: {
+                            bg: true,
+                                fontSize: true
+                        },
+                        style: {
+                            color: "red"
+                        },
+                        attrs: {
+                            abc: "iscool"
+                        },
+                        domProps: {
+                            // innerHTML: "<li>我是html</li>"
+                        }
+                    }, [
+                        createElement("li", 1),
+                        createElement("li", 2),
+                        createElement("li", 3)
+                    ]
+                );
+
+                console.log(obj); // obj -> vue的虚拟dom
+                return obj;
+            }
+        });
+    </script>
+</body>
+
+</html>
