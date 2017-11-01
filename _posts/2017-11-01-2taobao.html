@@ -1,0 +1,100 @@
+---
+title: 咸鱼搜索，闲鱼搜索
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>闲鱼搜索</title>
+    <script src="{{site.baseurl}}/js/post/2017-11-01/gbk.js"></script>
+    <script src="{{site.baseurl}}/js/vue.js"></script>
+    <!-- <script src="../js/post/2017-11-01/gbk.js"></script> -->
+    <!-- <script src="../js/vue.js"></script> -->
+    <style>
+        .img {
+            width: 100%;
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+        
+        .input-group {
+            text-align: center;
+            position: relative;
+            display: flex;
+            border-collapse: separate;
+            width: 484px;
+            margin: 0 auto;
+        }
+        
+        .input-group-btn {
+            position: relative;
+            font-size: 0;
+            white-space: nowrap;
+        }
+        
+        .input-group-btn button {
+            background-image: -webkit-linear-gradient(top, #f8f8f8, #f1f1f1);
+            border: none;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            color: #222;
+            height: 38px;
+            font-family: arial, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            min-width: 54px;
+            color: #757575;
+            padding: 0 16px;
+            margin-left: -1px;
+        }
+        
+        input {
+            flex-grow: 1;
+            border: none;
+            background-color: #fff;
+            height: 38px;
+            vertical-align: top;
+            border-radius: 2px;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+            padding: 6px 9px;
+        }
+        
+        input:focus {
+            outline: none;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="img"><img src="../images/post/2017-11-01/search.png" width="385" height="220"></div> -->
+    <div class="img"><img src="{{site.baseurl}}/images/post/2017-11-01/search.png" width="385" height="220"></div>
+    <div class="input-group" id="inputGroup">
+        <input type="text" v-model="query" @keyup.enter="doSearch" class="form-control">
+        <div class="input-group-btn">
+            <!-- Buttons -->
+            <button @click="doSearch">闲鱼搜索</button>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: "#inputGroup",
+            data: {
+                query: ""
+            },
+            methods: {
+                doSearch() {
+                    const encodeQuery = $URL.encode(this.query);
+                    console.log(encodeQuery);
+                    window.location.href = "https://s.2.taobao.com/list/list.htm?q=" + encodeQuery;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
