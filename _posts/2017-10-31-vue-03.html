@@ -1,0 +1,175 @@
+--- 
+title: vue -> 组件（全局，局部）,props子级传递,$emit -> 类似trigger()父级传递事件 
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        input {
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .clearFix:after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+        
+        .warp {
+            width: 348px;
+            padding: 100px 76px 50px;
+            margin: 50px;
+            background: #000;
+            box-shadow: 2px 2px 10px #6789ad;
+        }
+        
+        .searchIpt {
+            position: relative;
+            width: 336px;
+            border: 1px solid #3736ae;
+            padding: 5px;
+            border-radius: 24px;
+            background: #e4e4fe;
+        }
+        
+        .searchIpt input {
+            line-height: 34px;
+            border-radius: 18px;
+        }
+        
+        .searchIpt input:nth-of-type(1) {
+            float: left;
+            width: 228px;
+            padding-left: 40px;
+            border: 1px solid #c9c9d5;
+            background: #d9d9e2;
+        }
+        
+        .searchIpt input:nth-of-type(2) {
+            float: right;
+            width: 58px;
+            height: 36px;
+            border: 1px solid #fd635e;
+            background: #fd635e;
+        }
+        
+        .searchIpt span {
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            width: 23px;
+            height: 23px;
+            background: #f90;
+        }
+        
+        .searchIpt input:nth-of-type(1):focus {
+            background: #fff;
+            border-color: #fd635e;
+        }
+        
+        .list {
+            margin-top: 9px;
+        }
+        
+        .list li {
+            margin: 3px 0;
+            color: #333;
+            line-height: 30px;
+            padding-left: 16px;
+            width: 270px;
+            box-sizing: border-box;
+            border-radius: 14px;
+        }
+        
+        .list li.active,
+        .list li:hover {
+            color: #fff;
+            background: #fd635e;
+            cursor: pointer;
+        }
+    </style>
+    <!-- <script src="{{site.baseurl}}/js/vue.js"></script> -->
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div style="float: left;">
+            <h2>自定义的下拉框</h2>
+            <custom-select btn="查询" v-bind:list="list1"></custom-select>
+        </div>
+        <div style="float:left;">
+            <h2>自定义的下拉框2</h2>
+            <custom-select btn="搜索" v-bind:list="list2"></custom-select>
+        </div>
+    </div>
+    <script>
+        // 注册组件
+        Vue.component("custom-select", {
+            data() { //使用函数 因为保持每个组件数据独立性
+                return {
+                    selectShow: false,
+                    val: ""
+                }
+            },
+            props: ["btn", "list"],
+            template: `<section class="warp">
+					    <div class="searchIpt clearFix">
+						<div class="clearFix">
+							<input type="text" class="keyWord" :value="val" @click="selectShow = !selectShow" />
+							<input type="button" :value="btn">
+							<span></span>
+						</div>
+						<custom-list 
+							v-show="selectShow" 
+							:list="list"
+							v-on:receive="changeValueHandle"
+						></custom-list>
+					</div>
+				</section>`,
+            methods: {
+                changeValueHandle(value) {
+                    this.val = value;
+                }
+            }
+        })
+
+        Vue.component("custom-list", {
+            props: ["list"],
+            template: `<ul class="list">
+							<li v-for="item of list" @click="selectValueHandle(item)">{{item}}</li>
+						</ul>`,
+            methods: {
+                selectValueHandle(item) {
+                    this.$emit("receive", item);
+                }
+            }
+        })
+
+        new Vue({
+            el: "#app",
+            data: {
+                list1: ["北京", "上海", "杭州"],
+                list2: ["17-02-17", "17-02-18", "17-02-19"]
+            }
+        })
+    </script>
+</body>
+
+</html>
