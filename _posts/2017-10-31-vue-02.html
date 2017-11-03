@@ -1,0 +1,406 @@
+--- 
+title: vue -> todo demo(computed,directives,对象index,hashchange) 
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #fafafa;
+            font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        h2 {
+            margin: 0;
+            font-size: 12px;
+        }
+        
+        a {
+            color: #000;
+            text-decoration: none;
+        }
+        
+        input {
+            outline: 0;
+        }
+        
+        button {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: none;
+            font-size: 100%;
+            vertical-align: baseline;
+            font-family: inherit;
+            font-weight: inherit;
+            color: inherit;
+            outline: 0;
+        }
+        
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        
+        .page-top {
+            width: 100%;
+            height: 40px;
+            background-color: #db4c3f;
+        }
+        
+        .page-content {
+            width: 50%;
+            margin: 0px auto;
+        }
+        
+        .page-content h2 {
+            line-height: 40px;
+            font-size: 18px;
+            color: #fff;
+        }
+        
+        .main {
+            width: 50%;
+            margin: 0px auto;
+            box-sizing: border-box;
+        }
+        
+        .task-input {
+            width: 99%;
+            height: 30px;
+            outline: 0;
+            border: 1px solid #ccc;
+        }
+        
+        .task-count {
+            display: flex;
+            margin: 10px 0;
+        }
+        
+        .task-count li {
+            padding-left: 10px;
+            flex: 1;
+            color: #dd4b39;
+        }
+        
+        .task-count li:nth-child(1) {
+            padding: 5px 0 0 10px;
+        }
+        
+        .action {
+            text-align: center;
+            display: flex;
+        }
+        
+        .action a {
+            margin: 0px 10px;
+            flex: 1;
+            padding: 5px 0;
+            color: #777;
+        }
+        
+        .action a:nth-child(3) {
+            margin-right: 0;
+        }
+        
+        .active {
+            border: 1px solid rgba(175, 47, 47, 0.2);
+        }
+        
+        .tasks {
+            background-color: #fff;
+        }
+        
+        .no-task-tip {
+            padding: 10px 0 10px 10px;
+            display: block;
+            border-bottom: 1px solid #ededed;
+            color: #777;
+        }
+        
+        .big-title {
+            color: #222;
+        }
+        
+        .todo-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .todo-list li {
+            position: relative;
+            font-size: 16px;
+            border-bottom: 1px solid #ededed;
+        }
+        
+        .todo-list li:hover {
+            background-color: #fafafa;
+        }
+        
+        .todo-list li.editing {
+            border-bottom: none;
+            padding: 0;
+        }
+        
+        .todo-list li.editing .edit {
+            display: block;
+            width: 506px;
+            padding: 13px 17px 12px 17px;
+            margin: 0 0 0 43px;
+        }
+        
+        .todo-list li.editing .view {
+            display: none;
+        }
+        
+        .todo-list li .toggle {
+            text-align: center;
+            width: 40px;
+            /* auto, since non-WebKit browsers doesn't support input styling */
+            height: auto;
+            position: absolute;
+            top: 5px;
+            bottom: 0;
+            margin: auto 0;
+            border: none;
+            /* Mobile Safari */
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .toggle {
+            text-align: center;
+            width: 40px;
+            /* auto, since non-WebKit browsers doesn't support input styling */
+            height: auto;
+            position: absolute;
+            top: 5px;
+            bottom: 0;
+            margin: auto 0;
+            border: none;
+            /* Mobile Safari */
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .toggle:after {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="40" fill="none" stroke="#ededed" stroke-width="3"/></svg>');
+        }
+        
+        .toggle:checked:after {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="40" fill="none" stroke="#bddad5" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>');
+        }
+        
+        .todo-list li label {
+            white-space: pre-line;
+            word-break: break-all;
+            padding: 15px 60px 15px 15px;
+            margin-left: 45px;
+            display: block;
+            line-height: 1.2;
+            transition: color 0.4s;
+        }
+        
+        .todo-list li.completed label {
+            color: #d9d9d9;
+            text-decoration: line-through;
+        }
+        /*.tip-toggle {
+            padding-left: 0;
+            position: relative;
+        }
+
+        .tip-toggle .toggle {
+            top: -2px;
+        }
+
+        .tip-toggle span {
+            margin-left: 45px;
+        }*/
+        
+        .todo-list li .destroy {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 10px;
+            bottom: 0;
+            width: 40px;
+            height: 40px;
+            margin: auto 0;
+            font-size: 30px;
+            color: #cc9a9a;
+            margin-bottom: 11px;
+            transition: color 0.2s ease-out;
+        }
+        
+        .todo-list li .destroy:hover {
+            color: #af5b5e;
+        }
+        
+        .todo-list li .destroy:after {
+            content: '×';
+        }
+        
+        .todo-list li:hover .destroy {
+            display: block;
+        }
+        
+        .todo-list li .edit {
+            display: none;
+        }
+        
+        .todo-list li.editing:last-child {
+            margin-bottom: -1px;
+        }
+    </style>
+    <!-- <script src="{{site.baseurl}}/js/vue.js"></script> -->
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div class="page-top">
+        <div class="page-content">
+            <h2>任务计划列表</h2>
+        </div>
+    </div>
+    <div class="main">
+        <h3 class="big-title">添加任务：</h3>
+        <input placeholder="例如：吃饭睡觉打豆豆；    提示：+回车即可添加任务" class="task-input" type="text" v-model="todo" v-on:keyup.13="addTodo" />
+        <ul class="task-count" v-show="list.length">
+            <li>{{noCheckeLength}}个任务未完成</li>
+            <li class="action">
+                <a :class="{active:visibility === 'all'}" href="#all">所有任务</a>
+                <a :class="{active:visibility === 'unfinished'}" href="#unfinished">未完成的任务</a>
+                <a :class="{active:visibility === 'finished'}" href="#finished">完成的任务</a>
+            </li>
+        </ul>
+        <h3 class="big-title">任务列表：</h3>
+        <div class="tasks">
+
+            <span class="no-task-tip" v-show="!list.length">还没有添加任何任务</span>
+            <ul class="todo-list">
+                <li class="todo" :class="{completed: item.isChecked,editing: item === edtorTodos}" v-for="item in filteredList">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" v-model="item.isChecked" />
+                        <label @dblclick="edtorTodo(item)">{{ item.title }}</label>
+                        <button class="destroy" @click="deleteTodo(item)"></button>
+                    </div>
+                    <input v-foucs="edtorTodos === item" class="edit" type="text" v-model="item.title" @blur="edtorTodoed(item)" @keyup.13="edtorTodoed(item)" @keyup.esc="cancelTodo(item)" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        // const list = [{
+        //     title: "吃饭打豆豆",
+        //     isChecked: false,
+        // }, {
+        //     title: "艾斯酷",
+        //     isChecked: true
+        // }];
+
+        var store = {
+            save(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            },
+            fetch(key) {
+                return JSON.parse(localStorage.getItem(key)) || [];
+            }
+        };
+
+        const list = store.fetch("iscool-class");
+
+        const filter = {
+            all(list) {
+                return list
+            },
+            finished(list) {
+                return list.filter(item => item.isChecked);
+            },
+            unfinished(list) {
+                return list.filter(item => !item.isChecked);
+            }
+        }
+
+        var vm = new Vue({
+            el: ".main",
+            data: {
+                list,
+                todo: "",
+                edtorTodos: "", //记录正在编辑的数据
+                beforeTitle: "", //记录正在编辑的数据titile
+                visibility: "all"
+            },
+            watch: {
+                list: {
+                    handler() {
+                        store.save("iscool-class", this.list);
+                    },
+                    deep: true
+                }
+            },
+            computed: {
+                noCheckeLength() {
+                    return this.list.filter(item => !item.isChecked).length;
+                },
+                filteredList() {
+                    return filter[this.visibility] ? filter[this.visibility](list) : list;
+                }
+            },
+            methods: {
+                addTodo() {
+                    this.list.push({
+                        title: this.todo,
+                        isChecked: false
+                    });
+                    this.todo = "";
+                },
+                deleteTodo(todo) {
+                    const index = this.list.indexOf(todo);
+                    this.list.splice(index, 1);
+                },
+                edtorTodo(todo) {
+                    // 记录当前编辑前titile，取消还原
+                    this.beforeTitle = todo.title;
+                    this.edtorTodos = todo;
+                },
+                edtorTodoed(todo) { //编辑任务成功
+                    this.edtorTodos = "";
+                },
+                cancelTodo(todo) {
+                    todo.title = this.beforeTitle;
+                    this.beforeTitle = "";
+                    this.edtorTodos = ""; //让div显示
+                }
+
+            },
+            directives: {
+                "foucs": {
+                    update(el, binding) {
+                        // 值为真
+                        if (binding.value) {
+                            el.focus();
+                        }
+                    }
+                }
+            }
+        });
+
+        function watchHashChange() {
+            const hash = window.location.hash.slice(1);
+            vm.visibility = hash;
+        }
+
+        watchHashChange();
+
+        window.addEventListener("hashchange", watchHashChange);
+    </script>
+</body>
+
+</html>
