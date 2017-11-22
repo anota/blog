@@ -1,0 +1,120 @@
+--- 
+title: controller,mvvm,watch,filter,module,$rootScope 
+---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <!-- <script src="../js/angular.js"></script> -->
+    <title>angularjs 01</title>
+    <style>
+        div {
+            border-bottom: 1px solid #000;
+            margin: 20px 0;
+            padding: 10px 0;
+        }
+        
+        div div {
+            border: none;
+        }
+        
+        input {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div ng-controller="Aaa">
+        <p>{{name}}</p>
+        <div ng-controller="Bbb">
+            <p>{{name}}</p>
+            <p>{{age}}</p>
+        </div>
+    </div>
+    <div id="show" ng-controller="Ccc">
+        <input type="text" ng-model="name">
+        <span>{{name}}</span> <a href="javascript:;" ng-click="show()">点击</a>
+    </div>
+
+    <div ng-controller="Ddd">
+        <p>价格：<input type="text" ng-model="iphone.money"></p>
+        <p>个数：<input type="text" ng-model="iphone.num"></p>
+        <p>费用：{{sum() | currency:'￥'}}</p>
+        <p>运费：{{iphone.fre | currency:'￥'}}</p>
+        <p>总额：{{sum() + iphone.fre | currency:'￥'}}</p>
+    </div>
+
+    <div ng-controller="Eee">
+        <p>{{name}}</p>
+    </div>
+    <div ng-controller="Fff">
+        <p>{{name}}</p>
+    </div>
+</body>
+<script>
+    {
+        // 模块化与依赖注入压缩代码注意事项
+        var m1 = angular.module("myApp", []);
+
+        m1.controller("Eee", function($scope) {
+            $scope.name = "hello";
+        });
+
+        // 因为依赖注入，压缩代码时会改变变量名
+        m1.controller("Fff", ["$scope", $scope => {
+            $scope.name = "hi";
+        }]);
+    }
+
+
+    function Ddd($scope) {
+        $scope.iphone = {
+            money: 5,
+            num: 1,
+            fre: 10
+        };
+
+        $scope.sum = function() {
+            return $scope.iphone.money * $scope.iphone.num;
+        };
+
+        // 费用大于100 包邮
+        $scope.$watch($scope.sum, (newVal, oldVal) => {
+            $scope.iphone.fre = newVal >= 100 ? 0 : 10;
+        });
+    }
+
+    function Ccc($scope, $timeout) {
+        console.log("ccc");
+
+        $timeout(() => {
+            $scope.name = "anota";
+        }, 1000);
+
+        // setTimeout(() => {
+        //     $apply(() => {
+        //         $scope.name = "aballam";
+        //     })
+        // }, 2000);
+
+        $scope.show = function() {
+            $scope.name = "hi";
+        }
+    }
+
+    function Aaa($scope, $rootScope) {
+        // $rootScope -> 全局作用域
+        $scope.name = "hello";
+    }
+
+    function Bbb($scope) {
+        $scope.name = "hi";
+    }
+</script>
+
+</html>

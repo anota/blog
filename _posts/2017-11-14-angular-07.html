@@ -1,0 +1,209 @@
+--- title: $http,jsonp,$location,$anchorScroll,$cacheFactory,$interpolate,$q,$q.defer ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="../js/angular.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.3.8/angular-animate.min.js"></script>
+    <style>
+        .box {
+            transition: 1s all;
+        }
+        
+        .box.ng-enter {
+            opacity: 0;
+        }
+        
+        .box.ng-enter-active {
+            opacity: 1;
+        }
+        
+        .box.ng-leave {
+            display: none;
+        }
+        
+        .box.ng-enter-stagger {
+            animation-delay: 100ms;
+        }
+        
+        #parent div {
+            width: 300px;
+            height: 500px;
+            border: 1px solid #000;
+            margin: 20px;
+        }
+        
+        #parent ul {
+            width: 200px;
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
+    </style>
+    <title>angularjs 07</title>
+    <script>
+        var m1 = angular.module("myApp", []);
+        // begging
+        {
+            m1.controller("Aaa", ["$scope", "$http", ($scope, $http) => {
+                $http({
+                    method: "GET",
+                    // url: "../js/post/2017-11-14/data.json"
+                    url: "{{site.baseurl}}/js/post/2017-11-14/data.json"
+                }).success(function(data, state, header, config) {
+                    console.log(state);
+                }).error(function(data) {
+                    console.log(data);
+                });
+
+                $http.get("{{site.baseurl}}/js/post/2017-11-14/data.json").success(function(data, state, headers, config) {
+                    console.log(data);
+                })
+            }])
+        }
+        // http demo
+        {
+            m1.controller("Aaa", ["$scope", "$http", "$timeout", ($scope, $http, $timeout) => {
+                let timer = null;
+                $scope.data = [];
+
+                $scope.change = function(name) {
+                    $timeout.cancel(timer);;
+
+                    timer = $timeout(() => {
+                        $http({
+                            method: "JSONP",
+                            url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=' + name + '&cb=JSON_CALLBACK'
+                        }).success(data => {
+                            $scope.data = data.s;
+                        })
+                    }, 500);
+                }
+            }])
+        }
+        // $location
+        {
+            m1.controller("Bbb", ["$scope", "$location", ($scope, $location) => {
+                const json = {
+                    absUrl: $location.absUrl(), // 绝对地址
+                    path: $location.path(), // 路径
+                    hash: $location.hash(),
+                    search: $location.search(),
+                    url: $location.url(),
+                    host: $location.host(),
+                    port: $location.port(),
+                    protocol: $location.protocol() //协议
+                }
+
+                $location.path("aaa/eee/ccc").replace(); //replace()替换掉现在的路径，通过后退不会返回之前定义的path
+                $location.hash("hello");
+                $location.search({
+                    "age": 20
+                });
+                console.log(json);
+            }]);
+        }
+
+        // $anchorScroll 滚动指定位置，即使hash未改变也指定
+        {
+            m1.controller("Ccc", ["$scope", "$location", "$anchorScroll", ($scope, $location, $anchorScroll) => {
+                $scope.chage = id => {
+                    console.log(id);
+                    $location.hash(id);
+                    $anchorScroll();
+                }
+            }])
+        }
+
+        // $cacheFactory,$log
+        {
+            m1.controller("Ddd", ["$scope", "$cacheFactory", "$log", ($scope, $cacheFactory, $log) => {
+                $log.debug("debug");
+                $log.info("info");
+                // $log.error("error");
+
+                var cache = $cacheFactory("myCache", {
+                    capacity: 2
+                }); //可配置限定长度
+
+                cache.put("name", "anota");
+                cache.put("age", 20);
+                // cache.put("jod", "fe"); //不能再put
+                console.log("cache.info()", cache.info());
+                console.log("cache.get('name')", cache.get("name"));
+                cache.remove("name");
+                console.log("cache.remove('name')", cache.get('name'));
+            }])
+        }
+
+        // $interpolate =>插值
+        {
+            m1.controller("Eee", ["$scope", "$interpolate", ($scope, $interpolate) => {
+                $scope.$watch("body", newBody => {
+                    if (newBody) {
+                        var temp = $interpolate(newBody);
+                        $scope.showText = temp({
+                            name: $scope.name
+                        });
+                    }
+                })
+            }])
+        }
+        // $q
+        {
+            m1.controller("Fff", ["$scope", "$q", ($scope, $q) => {
+                var dfd = $q.defer();
+
+                function show() {
+                    setTimeout(() => {
+                        console.log(dfd);
+                        // dfd.reject(); //失败
+                        dfd.resolve(); //成功
+                    }, 2000);
+                    return dfd.promise;
+                }
+                show().then(() => {
+                    console.log("成功");
+                }, () => {
+                    console.log("失败");
+                })
+            }])
+        }
+    </script>
+</head>
+
+<body>
+    <div ng-controller="Aaa">
+        <input type="text" ng-model="name" ng-keyup="change(name)">
+        <input type="button" ng-click="change(name)" value="搜索">
+        <ul>
+            <li class="box" ng-repeat="d in data">{{d}}</li>
+        </ul>
+    </div>
+
+    <div ng-controller="Bbb"></div>
+
+    <div ng-controller="Ccc" id="parent">
+        <ul>
+            <li ng-repeat="id in [1,2,3,4,5]" ng-click="chage('div' + id)">{{id}}...................</li>
+        </ul>
+        <div ng-repeat="id in [1,2,3,4,5]" ng-attr-id="div{{id}}">{{id}}</div>
+    </div>
+
+    <!-- cacheFactory -->
+    <div ng-controller="Ddd"></div>
+
+    <div ng-controller="Eee">
+        <input type="text " ng-model="name">
+        <textarea ng-model="body" name="" id="" cols="30" rows="10"></textarea>
+        <p>@@showText@@</p>
+    </div>
+
+    <div ng-controller="Fff"></div>
+</body>
+
+</html>

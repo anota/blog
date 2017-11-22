@@ -1,0 +1,86 @@
+--- title: $interpolateProvider,$logProvider,$anchorScrollProvider ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="{{site.baseurl}}/js/angular.min.js"></script> -->
+    <!-- <script src="../js/angular.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <title>angularjs 08</title>
+    <style>
+        #parent div {
+            width: 300px;
+            height: 500px;
+            border: 1px solid #000;
+            margin: 20px;
+        }
+        
+        #parent ul {
+            width: 200px;
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
+    </style>
+    <script>
+        var m1 = angular.module("myApp", []);
+
+        {
+            m1.config(["$interpolateProvider", "$logProvider", "$anchorScrollProvider", function($interpolateProvider, $logProvider, $anchorScrollProvider) {
+                // $interpolateProvider =>插值
+                // $interpolateProvider.startSymbol("@@");
+                // $interpolateProvider.endSymbol("@@");
+
+                // $logProvider
+                $logProvider.debugEnabled(false);
+
+                // $anchorScrollProvider
+                $anchorScrollProvider.disableAutoScrolling();
+            }]);
+            m1.controller("Aaa", ["$scope", "$interpolate", "$log", ($scope, $interpolate, $log) => {
+
+                $log.debug("debug");
+                $log.info("info");
+
+                $scope.$watch("body", newBody => {
+                    if (newBody) {
+                        var temp = $interpolate(newBody);
+                        $scope.showText = temp({
+                            name: $scope.name
+                        });
+                    }
+                })
+            }]);
+        }
+        // $anchorScroll 滚动指定位置，即使hash未改变也指定
+        {
+            m1.controller("Ccc", ["$scope", "$location", "$anchorScroll", ($scope, $location, $anchorScroll) => {
+                $scope.change = id => {
+                    console.log(id);
+                    $location.hash(id);
+                    $anchorScroll();
+                }
+            }])
+        }
+    </script>
+</head>
+
+<body>
+    <div ng-controller="Aaa">
+        <input type="text " ng-model="name">
+        <textarea ng-model="body" name="" id="" cols="30" rows="10"></textarea>
+        <p>@@showText@@</p>
+    </div>
+
+    <div ng-controller="Ccc" id="parent">
+        <ul>
+            <li ng-repeat="id in [1,2,3,4,5]" ng-click="change('div' + id)">{{id}}...................</li>
+        </ul>
+        <div ng-repeat="id in [1,2,3,4,5]" ng-attr-id="div{{id}}">{{id}}</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+--- title: derective,ng-transclude,?^ ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="{{site.baseurl}}/js/angular.min.js"></script> -->
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background: black;
+            position: absolute;
+            cursor: move;
+        }
+        
+        #div3 div,
+        #div4 div {
+            width: 200px;
+            height: 200px;
+            border: 1px solid red;
+            display: none;
+        }
+        
+        #div3 input.active,
+        #div4 input.active {
+            background: red;
+        }
+    </style>
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="{{site.baseurl}}/js/jquery-1.9.1.min.js"></script>
+    <!-- <script src="../js/angular.js"></script> -->
+    <!-- <script src="../js/jquery-1.9.1.min.js"></script> -->
+    <title>angularjs 06</title>
+    <script>
+        const m1 = angular.module("myApp", []); {
+            m1.directive("myHello", () => {
+                return {
+                    // A 属性
+                    // E 元素，标签
+                    restrict: "AECM", // 区分大小写可以组合使用
+                    replace: true, //替换掉默认标签
+                    template: "<div>hello angular</div>"
+                }
+            });
+            // myTab
+            m1.directive("myTab", () => {
+                return {
+                    restrict: "E",
+                    replace: true,
+                    // scope: true, //独立作用域，当前作用域找不到往父级找
+                    scope: { // 大括号为隔离作用域，只能用指令的作用域，例如控制器中定义的
+                        myId: "@", // 使用标签传值 @aaa，如果变量名相同可以省略
+                        myName: "=", // 引入标签变量
+                        myFn: "&" // 引入标签方法
+                    },
+                    controller: ["$scope", $scope => {
+                        $scope.name = "iscool";
+                    }],
+                    templateUrl: "{{site.baseurl}}/tpl/2.html"
+                }
+            });
+            m1.controller("Aaa", ["$scope", $scope => {
+                $scope.name = "hello";
+                $scope.show = function(n) {
+                    console.log(n);
+                    alert(n);
+                }
+            }])
+        }
+        // newTab
+        {
+            m1.directive("newTab", () => {
+                return {
+                    restrict: "E",
+                    replace: true,
+                    scope: {
+                        myId: "@",
+                        myData: "="
+                    },
+                    controller: ["$scope", $scope => {
+                        $scope.name = "anota";
+                    }],
+                    templateUrl: "{{site.baseurl}}/tpl/3.html",
+                    link(scope, element, attr) {
+                        console.log(scope.name);
+                        console.log(element);
+                        console.log(attr.myId);
+                        $(element).delegate("input", "click", function() {
+                            $(this).attr("class", "active").siblings("input").attr("class", "");
+
+                            $(this).siblings("div").eq($(this).index()).show().siblings("div").hide();
+                        })
+
+                    }
+                }
+            });
+
+            m1.controller("Bbb", ["$scope", $scope => {
+                $scope.data1 = [{
+                    title: '数学',
+                    content: '111111111'
+                }, {
+                    title: '语文',
+                    content: '222222222'
+                }, {
+                    title: '英语',
+                    content: '333333333'
+                }];
+                $scope.data2 = [{
+                    title: '物理',
+                    content: '444444444'
+                }, {
+                    title: '化学',
+                    content: '555555555'
+                }];
+            }])
+        }
+        // myDrag
+        {
+            m1.directive("myDrag", () => {
+                return {
+                    restrict: "A",
+                    link(scope, element, attr) {
+                        var disX = 0;
+                        var disY = 0;
+                        console.log("===========", attr.myDrag);
+                        const myDrag = angular.equals(attr.myDrag, 'true');
+                        console.log("=====myDrag======", attr.myDrag);
+
+                        element.on("mousedown", function(ev) {
+                            console.log("myDrag", myDrag);
+                            console.log("myDrag", attr);
+                            var This = this;
+                            disX = ev.pageX - $(this).offset().left;
+                            disY = ev.pageY - $(this).offset().top;
+
+                            if (myDrag) {
+                                var $line = $("<div>");
+                                $line.css({
+                                    width: $(this).outerWidth(),
+                                    height: $(this).outerHeight(),
+                                    position: "absolute",
+                                    left: $(this).offset().left,
+                                    top: $(this).offset().top,
+                                    border: "1px gray dotted"
+                                });
+                                $("body").append($line);
+                            }
+
+                            $(document).on("mousemove", ev => {
+
+                                if (myDrag) {
+                                    $line.css("left", ev.pageX - disX);
+                                    $line.css("top", ev.pageY - disY);
+                                } else {
+                                    $(This).css("left", ev.pageX - disX);
+                                    $(This).css("top", ev.pageY - disY);
+                                }
+                            });
+
+                            $(document).on("mouseup", ev => {
+                                $(document).off();
+                                if (myDrag) {
+                                    $(This).css({
+                                        left: $line.offset().left,
+                                        top: $line.offset().top
+                                    });
+                                    $line.remove();
+                                }
+                            });
+
+                            return false;
+                        })
+                    }
+                }
+            })
+        }
+
+        // hello
+        {
+            m1.directive("hello", function() {
+                return {
+                    restrict: 'E',
+                    replace: true,
+                    transclude: true, //存在嵌套
+                    controller: function($scope) { //使用es6方式编写报错controller($scope){}，情况未知
+                        // this.不能用箭头函数
+                        // $scope.name = "iscool"; // $scope只能在hello指令找到当前变量，在外部只能使用this
+                        this.name = "iscool";
+                        this.show = function() {};
+                    },
+                    template: "<div>hello angular<h1 ng-transclude></h1></div>"
+                };
+            });
+
+            m1.directive("hi", () => {
+                return {
+                    restrict: "E",
+                    replace: true,
+                    require: "?^hello", //？找不到也不报错,^向上查找
+                    template: "<span>hi angular</span>",
+                    link(scope, element, attr, reController) {
+                        console.log(reController);
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <p>===============ng-transclude=============</p>
+    <hello>
+        <hi></hi>
+    </hello>
+    <p>=======directive进阶=========</p>
+    <section ng-controller="Bbb">
+
+
+        <div class="box" my-drag="false"></div>
+        <div class="box" my-drag="true"></div>
+        <new-tab my-id="div3" my-data="data1"></new-tab>
+        <new-tab my-id="div4" my-data="data2"></new-tab>
+    </section>
+    <p>========directive入门=========</p>
+    <section ng-controller="Aaa">
+        <my-hello></my-hello>
+        <p my-hello></p>
+        <my-tab my-id="div1" my-name="name" my-fn="show(num)"></my-tab>
+        <my-tab my-id="div2" my-name="name" my-fn="show(num)"></my-tab>
+    </section>
+</body>
+
+</html>

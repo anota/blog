@@ -1,0 +1,195 @@
+--- title: angularjs工具方法 ---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="{{site.baseurl}}/js/jquery-1.9.1.min.js"></script>
+    <!-- <script src="../js/angular.js"></script> -->
+    <!-- <script src="../js/jquery-1.9.1.min.js"></script> -->
+    <title>angularjs 02</title>
+</head>
+
+<body>
+
+    <div ng-controller="Aaa">
+        <p>{{name}}</p>
+    </div>
+
+    <div ng-controller="Bbb">
+        <p>{{name}}</p>
+    </div>
+</body>
+<script>
+    {
+        // angular.isArray();
+        // angular.isDate();
+        // angular.isDefined();
+        // angular.isUndefined();
+        // angular.isFunction();
+        // angular.isNumber();
+        // angular.isObject();
+        // angular.isString();
+        // angular.isElement();
+        // angular.version;
+        // angular.equals();
+        // angular.forEach();
+        // angular.fromJson();
+        // angular.toJson();
+        // angular.identity();
+        // angular.noop();
+        // angular.lowervase();
+        // angular.uppercase();
+        // angular.element();
+        // angular.bootstrap();
+        // angular.injector();
+    }
+
+    {
+        // angular.bind(); -> $.proxy();改变 this指向
+
+        function show(n1, n2) {
+            console.log(n1);
+            console.log(n2);
+            console.log(this);
+        }
+
+        show(2, 3);
+        angular.bind(document, show, 3)(4);
+        angular.bind(document, show, 3, 4)();
+        angular.bind(document, show)(3, 4);
+    }
+
+    {
+
+        // copy
+        let a = {
+            name: "hello"
+        }
+        let b = {
+            age: "20"
+        }
+        const d = angular.copy(b, a);
+
+        console.log(b);
+        console.log(d);
+    }
+
+    {
+        // extend
+        let a = {
+            name: "hello"
+        }
+        let b = {
+            age: "20"
+        }
+        var c = angular.extend(b, a);
+        // 扩展b，并返回b
+        console.log(b);
+        console.log(c);
+    }
+
+    {
+        // isArray
+        var a = [];
+        console.log(angular.isArray(a));
+        console.log(angular.isElement(document.body));
+        console.log(angular.isElement($("body")));
+        console.log(angular.version);
+
+        var a = NaN;
+        var b = NaN;
+        // equals
+        console.log(angular.equals(a, b));
+
+        var c = [];
+        var d = [];
+        console.log(angular.equals(c, d));
+    }
+
+    {
+        var arr = ["a", "b", "c"];
+        var obj = {
+            name: "anota",
+            age: 20
+        }
+        var result = [];
+
+        angular.forEach(arr, (value, i) => {
+            console.log(value);
+            console.log(i);
+        });
+
+        console.log("==============");
+
+        angular.forEach(obj, (value, key) => {
+            console.log(value);
+            console.log(key);
+        });
+
+        console.log("=============");
+
+        angular.forEach(obj, function(value, key) {
+            this.push(value + key);
+        }, result);
+
+        console.log(result);
+    }
+
+    {
+        // JSON.parse()
+        // JSON.stringify();
+        var str = '{"name":"hello","age":"20"}';
+        var json = angular.fromJson(str);
+        console.log(json);
+        var str2 = angular.toJson(json);
+        // 格式化json字符串
+        var str3 = angular.toJson(json, true);
+
+        console.log(str2);
+        console.log(str3);
+    }
+
+    {
+        var str = "hello";
+        console.log(angular.identity(str)); // hello
+
+        // 实现为
+        function identity(str) {
+            return;
+        }
+
+        console.log(angular.noop()); //undefined
+        // 实现为
+        function noop() {}
+    }
+
+    {
+        console.log(angular.uppercase("hello"));
+    }
+
+    {
+        const m1 = angular.module("myApp1", []);
+        const m2 = angular.module("myApp2", []);
+
+        m1.controller("Aaa", ["$scope", ($scope) => {
+            $scope.name = "hello";
+        }]);
+
+        m2.controller("Bbb", ["$scope", ($scope) => {
+            $scope.name = "hi";
+        }]);
+
+        document.onclick = function() {
+            const aDiv = document.querySelectorAll("div");
+
+            angular.bootstrap(aDiv[0], ["myApp1"]);
+            angular.bootstrap(aDiv[1], ["myApp2"]);
+        }
+    };
+</script>
+
+</html>

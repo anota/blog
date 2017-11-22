@@ -1,0 +1,124 @@
+--- title: $scope.$apply,$filter,repeat ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="../js/angular.js"></script> -->
+    <!-- <script src="../js/jquery-1.9.1.min.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="{{site.baseurl}}/js/jquery-1.9.1.min.js"></script>
+    <title>angularjs 03</title>
+</head>
+
+<body>
+
+    <div ng-controller="Aaa">
+        <p>{{name}}</p>
+    </div>
+
+    <!-- <div ng-controller="Bbb">
+        <p>{{name}}</p>
+    </div> -->
+    <div>
+        <p>{{name}}</p>
+    </div>
+
+    <div>
+        <p>{{name | fristUpper:2}}</p>
+    </div>
+    <p>===============filter=====================</p>
+    <div ng-controller="Ccc">
+        <p>{{name2}}</p>
+        <p>{{name3}}</p>
+        <p>{{name4}}</p>
+        <p>{{name5}}</p>
+        <p>==================================</p>
+        <p>{{num | currency : "￥"}}</p>
+        <p>{{num | number : 0}}</p>
+        <p>{{num | number : 2}}</p>
+        <p>{{name | uppercase}}</p>
+        <pre>{{json | json}}</pre>
+        <p>{{name | limitTo : 2}}</p>
+        <p>{{date | date : 'yyyy'}}</p>
+        <p>{{date | date : 'yyyy/MM/dd'}}</p>
+        <p>{{arr | orderBy : "age"}}</p>
+        <p>{{arr | filter : "l"}}</p>
+        <p>{{name | limitTo : 2 | uppercase}}</p>
+    </div>
+
+    <p>=========ng-repeat=============</p>
+    <ul ng-controller="Eee">
+        <li ng-repeat="data in dataList">{{data}}</li>
+    </ul>
+</body>
+<script>
+    {
+        function Eee($scope) {
+            $scope.dataList = [
+                "aaaaa", "bbbb", "ccccc"
+            ]
+        }
+    }
+
+    {
+        function Aaa($scope, $timeout) {
+            $scope.name = "hello";
+            setTimeout(() => {
+                $scope.$apply(() => {
+                    $scope.name = "hahahah";
+                })
+            }, 2000)
+        }
+    }
+
+    {
+        const m1 = angular.module("myApp", []);
+
+        // 箭头函数不要{}，省略返回
+        m1.filter("fristUpper", () => (str, num) => str.charAt(0).toUpperCase() + str.substring(1))
+
+        // m1.controller('Bbb', ['$scope', function($scope) {
+        //     // $scope.name = 'hi';
+        // }]);
+        m1.run(['$rootScope', function($rootScope) {
+            $rootScope.name = 'hello';
+        }]);
+
+        m1.controller("Ccc", ["$scope", "$filter", function($scope, $filter) {
+            $scope.num = "344343.343434";
+            $scope.json = {
+                name: "anota",
+                age: "29"
+            };
+
+
+            $scope.arr = [{
+                color: "red",
+                age: "20"
+            }, {
+                color: "yellow",
+                age: "30"
+            }, {
+                color: "blue",
+                age: "40"
+            }, {
+                color: "green",
+                age: "10"
+            }];
+            $scope.date = new Date();
+
+            {
+                $scope.name2 = $filter("uppercase")("hello");
+                $scope.name3 = $filter("number")("2323232.323232", 1);
+                $scope.name4 = $filter("date")("232434343", "hh");
+            }
+        }]);
+
+        console.log(m1);
+    }
+</script>
+
+</html>

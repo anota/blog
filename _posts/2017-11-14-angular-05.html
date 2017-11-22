@@ -1,0 +1,208 @@
+--- title: ng-class,ng-style,ng-attr-xxx,ng-show,ng-if,ng-init,valid ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <!-- <script src="../js/angular.js"></script> -->
+    <title>angularjs 05</title>
+    <style>
+        .red {
+            background: red;
+        }
+        
+        .yellow {
+            color: yellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div ng-controller="Eee">
+        <p>===========validate demo==============</p>
+        <form novalidate name="nForm">
+            <div>
+                <label>用户名:</label>
+                <input type="text" name="nText" ng-model="regText.name" required ng-pattern="/^[a-zA-Z]+$/" ng-blur="change('regText',nForm.nText.$error)">
+                <span ng-repeat="re in regText.regList | filter : regText.regVal">{{re.tips}}</span>
+            </div>
+            <div>
+                <label>密码：</label>
+                <input type="password" name="nPassword" ng-model="regPassword.name" required ng-minlength="6" ng-blur="change('regPassword',nForm.nPassword.$error)">
+                <span ng-repeat="re in regPassword.regList | filter : regPassword.regVal">{{re.tips}}</span>
+            </div>
+        </form>
+    </div>
+
+    <div ng-controller="Ddd">
+        <p>==========validate,invalid,prisine,dirty,error================</p>
+        <form novalidate name="myForm">
+            <input type="text" name="myText" ng-model="text" required ng-minlength="5" ng-pattern="/^[a-zA-Z]+$/">
+            <p>valid:{{myForm.myText.$valid}}</p>
+            <p>invalid:{{myForm.myText.$invalid}}</p>
+            <!-- 未修改过的 -->
+            <p>pristine:{{myForm.myText.$pristine}}</p>
+            <!-- 修改过的 -->
+            <p>dirty:{{myForm.myText.$dirty}}</p>
+            <p>error:{{myForm.myText.$error}}</p>
+        </form>
+    </div>
+    <div ng-controller="Ccc">
+        <p>=========ng-option===========</p>
+        <a href="">{{myColor.name}}</a>
+        <select ng-options="color.name for color in colors" ng-model="myColor">
+        </select>
+        <form validate>
+            <input type="email">
+        </form>
+    </div>
+    <p>==========as============</p>
+    <div ng-controller="FnAaa as a1">
+        <div>{{a1.text}}:{{a1.show()}}</div>
+    </div>
+    <div ng-controller="Aaa">
+
+        <p>=======ng-include=======</p>
+        <div ng-include="'{{site.baseurl}}/tpl/1.html'"></div>
+        <p>=======ng-init=========</p>
+        <div ng-repeat="arrOuter in arr" ng-init="outerIndex = $index">
+            <div ng-repeat="arrInner in arrOuter" ng-init="innerIndex = $index">
+                <p>{{arrInner}}:{{outerIndex}}{{innerIndex}}</p>
+            </div>
+        </div>
+        <p>=======ng-show,ng-if,ng-switch,ng-open==========</p>
+        <input type="checkbox" ng-model="bBtn">
+
+        <div ng-show="bBtn">aaaaaaa</div>
+        <div ng-if="bBtn">bbbbbbb</div>
+
+        <div ng-switch on="bBtn">
+            <p ng-switch-default>默认效果</p>
+            <p ng-switch-when="false">切换效果</p>
+        </div>
+
+        <details ng-open="bBtn">
+            <summary>Copyright 2011.</summary>
+            <p>All pages and graphics on this web site are the property of W3School.</p>
+        </details>
+
+        <p>=======ng-class,ng-style,ng-attr-xxx==========</p>
+        <div ng-class={{sClass}}>{{text}}</div>
+        <div ng-style={{style}}>{{text}}</div>
+        <a ng-href={{url}}>aaaaaaa</a>
+        <a ng-attr-href="{{url}}" ng-attr-title="{{text}}">bbbbb</a>
+
+    </div>
+</body>
+<script>
+    const m1 = angular.module("myApp", []); {
+        // valid demo
+        {
+            m1.controller("Eee", ["$scope", $scope => {
+                $scope.regText = {
+                    regVal: "default",
+                    regList: [{
+                        name: 'default',
+                        tips: '请输入用户名'
+                    }, {
+                        name: "required",
+                        tips: '用户名不能为空'
+                    }, {
+                        name: 'pattern',
+                        tips: '用户名必须是字幕'
+                    }, {
+                        name: 'done',
+                        tips: "pass"
+                    }]
+                };
+
+                $scope.regPassword = {
+                    regVal: "defalut",
+                    regList: [{
+                        name: "defalut",
+                        tips: "请输入密码"
+                    }, {
+                        name: "required",
+                        tips: "密码不能为空"
+                    }, {
+                        name: "minlength",
+                        tips: "密码至少6位"
+                    }, {
+                        name: "done",
+                        tips: "pass"
+                    }]
+                };
+
+                // $scope.regText.regVal = "pass";
+
+                $scope.change = function(reg, err) {
+
+                    console.log($scope.regText);
+                    console.log("================");
+                    console.log($scope.regPassword);
+                    console.log(err);
+                    console.log(reg);
+                    for (var attr in err) {
+                        console.log(attr);
+                        console.log(attr);
+                        if (err[attr] == true) {
+                            $scope[reg].regVal = attr;
+                            return;
+                        }
+                    }
+                    $scope[reg].regVal = "done";
+                }
+            }]);
+
+        }
+        // valid
+        m1.controller("Ddd", ["$scope", $scope => {
+
+        }])
+
+        m1.controller("Ccc", ["$scope", $scope => {
+            $scope.colors = [{
+                name: "red"
+            }, {
+                name: "yellow"
+            }, {
+                name: "blue"
+            }]
+        }])
+    }
+
+    {
+        m1.controller("Bbb", ["$scope", FnAaa]);
+        // as -> 面向对象模式
+        function FnAaa($scope) {
+
+        }
+        FnAaa.prototype.num = "123";
+        FnAaa.prototype.text = "hello anota";
+        FnAaa.prototype.show = function() {
+            return "angluarJs";
+        }
+    }
+
+    m1.controller("Aaa", ["$scope", (($scope) => {
+
+
+        {
+            $scope.arr = [
+                ["a", "b"],
+                ["c", "d"]
+            ];
+        }
+
+        $scope.bBtn = true;
+        $scope.text = "hello anota";
+        $scope.style = "{color:'red',background:'yellow'}";
+        $scope.sClass = "{red:true,yellow:true}";
+        $scope.url = "https://googole.com"
+    })]);
+</script>
+
+</html>

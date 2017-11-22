@@ -1,0 +1,129 @@
+--- title: factory,provider,引入模块中的服务,service,constant,value ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="../js/angular.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <title>angularjs 08</title>
+    <script>
+        var m1 = angular.module("module1", []);
+        /* m1.factory("myService", function() {
+            return {
+                name: "hello",
+                show: function() {
+                    return this.name + ":angular";
+                }
+            };
+        });*/
+
+        // m1.factory("myRandomNum", function() {
+        //     return function(num1, num2) {
+        //         return Math.random() * (num2 - num1) + num1;
+        //     };
+        // });
+
+        {
+            // provider -> 与factory区别是 provider是可配置的
+            m1.provider("myService", function() {
+                return {
+                    name: "hello",
+                    $get: function() {
+                        return {
+                            name: this.name,
+                            show: function() {
+                                return this.name + ":angular";
+                            }
+                        }
+                    }
+                };
+            });
+
+            m1.provider("myRandomNum", function() {
+                return {
+                    bolInt: false,
+                    int: function(argBol) {
+                        if (argBol) {
+                            this.bolInt = true;
+                        } else {
+                            this.bolInt = false;
+                        }
+                    },
+                    $get: function() {
+                        var This = this;
+                        return function(num1, num2) {
+                            return This.bolInt ? Math.round(Math.random() * (num2 - num1) + num1) : Math.random() * (num2 - num1) + num1;
+                        }
+                    }
+                }
+            });
+
+            // provider方式创建的服务是可配置的
+            m1.config(["myServiceProvider", "myRandomNumProvider", function(myServiceProvider, myRandomNumProvider) {
+                console.log(myServiceProvider);
+                myServiceProvider.name = "hi";
+                myRandomNumProvider.int(true);
+            }]);
+
+        }
+
+        m1.controller("Aaa", ["$scope", "myService", "myRandomNum", ($scope, myService, myRandomNum) => {
+            console.log("myService.show()", myService.show());
+            console.log("myRandomNum", myRandomNum(-3, 8));
+        }]);
+
+        // 引入模块的服务
+        const m2 = angular.module("myApp", ["module1"]); {
+            m2.controller("Bbb", ["$scope", "myService", ($scope, myService) => {
+                console.log("================m2==================");
+                console.log(myService.show());
+            }])
+        }
+
+
+        // service 比较少用，创建对象方式
+        {
+            m2.service("myService1", FnService);
+
+            function FnService() {
+                this.name = "hello";
+            }
+
+            FnService.prototype.age = 20;
+
+            m2.controller("Ccc", ["$scope", "myService1", ($scope, myService) => {
+                console.log("==============m2:myService=================");
+                console.log(myService.name);
+                console.log(myService.age);
+            }]);
+        }
+        // 配置服务的的属性 constat => 可配置,value 不可配置
+        // value => 
+        {
+            m2.constant("myService2", "hellllllo angular");
+            // m2.value("myService2", "hiiiiiii angular");
+
+            m2.config(["myService2", function(myService) {
+                console.log("===========constant============");
+                console.log(myService);
+            }]);
+
+            m2.controller("Ddd", ["$scope", "myService2", function($scope, myService) {
+                console.log("=============constant:=================");
+                console.log(myService);
+            }])
+        }
+    </script>
+</head>
+
+<body>
+    <div ng-controller="Aaa"></div>
+    <div ng-controller="Bbb"></div>
+    <div ng-controller="Ccc"></div>
+    <div ng-controller="Ddd"></div>
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+--- title: ngRoute,$routeProvider,$routeChageStart,$routeParams ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="../js/angular.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.2.9/angular-route.min.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.2.9/angular-animate.min.js"></script>
+    <style>
+        .box {
+            transition: 1s all;
+            position: absolute;
+        }
+        
+        .box.ng-enter {
+            opacity: 0;
+        }
+        
+        .box.ng-enter-active {
+            opacity: 1;
+        }
+        
+        .box.ng-leave {
+            opacity: 1;
+        }
+        
+        .box.ng-leave-active {
+            opacity: 0;
+        }
+    </style>
+    <title>angularjs 10</title>
+    <script>
+        var m1 = angular.module("myApp", ["ngRoute", "ngAnimate"]);
+        m1.config(["$routeProvider", $routeProvider => {
+            $routeProvider.when("/aaa/:num", {
+                    template: "<p>首页的内容</p>{{name}}",
+                    controller: "Aaa"
+                })
+                .when("/bbb", {
+                    template: "<p>学院的内容</p>{{name}}",
+                    controller: "Bbb"
+                })
+                .when("/ccc", {
+                    template: "<p>课程的内容</p>{{name}}",
+                    controller: "Ccc"
+                })
+                .otherwise({
+                    redirectTo: "/aaa"
+                })
+        }]);
+
+        m1.run(["$rootScope", $rootScope => {
+            $rootScope.$on("$routeChageStart", function(event, current, pre) {
+                console.log(event);
+                console.log(current);
+                console.log(pre);
+            })
+        }]);
+
+        m1.controller("Aaa", ["$scope", "$location", "$routeParams", ($scope, $location, $routeParams) => {
+            $scope.name = "hello";
+            $scope.$location = $location;
+            console.log($routeParams);
+        }]);
+
+        m1.controller("Bbb", ["$scope", $scope => {
+            $scope.name = "bbb";
+        }]);
+
+        m1.controller("Ccc", ["$scope", $scope => {
+            $scope.name = "您好";
+        }]);
+
+        m1.controller("Ddd", ["$scope", $scope => {
+            $scope.count = 0;
+            $scope.$on("myEvent", function(event) {
+                $scope.count++;
+
+                console.log(event.tragetScope == event.currentScope);
+                console.log(event.name);
+
+                // event.stopPropagation();
+            })
+        }])
+    </script>
+</head>
+
+<body>
+    <div ng-controller="Aaa">
+        <a href="" ng-click="$location.path('aaa/123')">首页</a>
+        <a href="" ng-click="$location.path('bbb')">学员</a>
+        <a href="" ng-click="$location.path('aaa/456')">课程</a>
+        <div class="box" ng-view></div>
+    </div>
+
+    <div ng-controller="Ddd">
+        {{count}}
+        <div ng-controller="Ddd" ng-click="$emit('myEvent')">
+
+            {{count}}
+            <div ng-controller="Ddd">
+                {{count}}
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

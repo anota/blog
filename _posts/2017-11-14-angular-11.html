@@ -1,0 +1,107 @@
+--- title: ng-enter,ng-enter-active,ng-leave,ng-leave-active ---
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="../js/angular.js"></script> -->
+    <!-- <script src="../js/jquery-1.9.1.min.js"></script> -->
+    <script src="{{site.baseurl}}/js/angular.js"></script>
+    <script src="{{site.baseurl}}/js/jquery-1.9.1.min.js"></script>
+    <script src="http://cdn.bootcss.com/angular.js/1.2.9/angular-animate.min.js"></script>
+    <title>angularjs 11</title>
+    <style>
+        .box {
+            width: 200px;
+            height: 200px;
+            background: red;
+            transition: 1s all;
+            margin: 2px;
+        }
+        
+        .box1 {
+            width: 200px;
+            height: 200px;
+            background: red;
+            /* transition: 1s all; */
+            margin: 2px;
+        }
+        
+        .box.ng-enter {
+            opacity: 0;
+        }
+        
+        .box.ng-enter-active {
+            opacity: 1;
+        }
+        
+        .box.ng-leave {
+            opacity: 1;
+        }
+        
+        .box.ng-leave-active {
+            opacity: 0;
+        }
+        
+        .box.ng-hide-remove {
+            opacity: 0;
+        }
+        
+        .box.ng-hide-remove-active {
+            opacity: 1;
+        }
+        
+        .box.ng-hide-add {
+            opacity: 1;
+        }
+        
+        .box.ng-hide-add-active {
+            opacity: 0;
+        }
+    </style>
+    <script>
+        var m1 = angular.module("myApp", ["ngAnimate"]);
+        m1.controller("Aaa", ["$scope", $scope => {
+            $scope.bBtn = true;
+            $scope.bBox = true;
+        }]);
+
+        m1.animation(".box1", function() {
+            return {
+                addClass: function(element, sClass, done) {
+                    console.log("============addClass============");
+                    console.log(element);
+                    console.log(sClass);
+                    console.log(done);
+                    $(element).animate({
+                        width: 0,
+                        height: 0
+                    }, 1000, done);
+                },
+                removeClass: function(element, sClass, done) {
+                    console.log("============removeClass===============");
+                    $(element).animate({
+                        width: 200,
+                        height: 200
+                    }, 1000, done);
+                }
+            }
+        })
+    </script>
+</head>
+
+<body>
+    <div ng-controller="Aaa">
+        <input type="checkbox" ng-model="bBtn">
+
+        <lable>js中的animate</lable>
+        <input type="checkbox" ng-model="bBox">
+        <div ng-if="bBtn" class="box"></div>
+        <div ng-show="bBtn" class="box"></div>
+        <div class="box1" ng-show="bBox"></div>
+    </div>
+</body>
+
+</html>
