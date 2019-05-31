@@ -1,0 +1,165 @@
+--- 
+title: React: 搜索，过滤
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{site.baseurl}}/css/bootstrap.css">
+    <style type="text/css">
+        table th,
+        table td {
+            text-align: center;
+        }
+    </style>
+    <script src="{{site.baseurl}}/js/react/react.js"></script>
+    <script src="{{site.baseurl}}/js/react/react-dom.js"></script>
+    <script src="{{site.baseurl}}/js/react/browser.min.js"></script>
+    <script src="{{site.baseurl}}/js/react/pubsub.js"></script>
+    <title>react</title>
+</head>
+
+<body>
+    <div class="container" id="studentInfo"></div>
+    <script type="text/babel">
+        const data =  [
+                        {stName:"小乐",gender:"女",age:18,height:165,weigth:45,_id:2},
+                        {stName:"leo",gender:"男",age:35,height:180,weigth:80,_id:0},
+                        {stName:"童童",gender:"女",age:22,height:171,weigth:60,_id:6},
+                        {stName:"momo",gender:"男",age:26,height:175,weigth:70,_id:1},
+                        {stName:"leo",gender:"女",age:18,height:170,weigth:50,_id:3},
+                        {stName:"momo",gender:"女",age:38,height:166,weigth:50,_id:4},
+                        {stName:"童童",gender:"男",age:30,height:175,weigth:65,_id:5}
+                     ]
+        const StudentApp = React.createClass({
+            getInitialState(){
+                return{
+                    studentData:data,
+                    genderValue:"all",
+                    changeName:""
+                }
+            },
+            genderFilterHandle(e){
+                this.setState({genderValue:e.target.value});
+            },
+            nameFilterHandle(e){
+                this.setState({changeName:e.target.value});
+            },
+            componentDidMount(){
+                PubSub.subscribe("delectItem",function(evName,_id){
+                    const newArr = this.state.studentData.filter(item => item._id !== _id);
+                    console.log("newArr",newArr);
+                    console.log("newArr",_id);
+                    this.setState({studentData:newArr});
+                }.bind(this));
+            },
+            render(){
+                return(
+                    <div>
+                       <h1>学员信息表</h1>
+                       <div className="bs-example">
+                           <div className="form-group">
+                               <label>按性别筛选</label>
+                               <select className="form-control" onChange={this.genderFilterHandle}>
+                                   <option value="all">all</option>
+                                   <option value="1">男</option>
+                                   <option value="0">女</option>
+                               </select>
+                           </div>
+                           <div className="form-group">
+                               <label>按名字筛选</label>
+                               <input type="text" className="form-control" placeholder="请输入名字" onKeyUp = {this.nameFilterHandle} />
+                           </div>
+                       </div>
+                       <StudentInfoComponent 
+                        studentData = {this.state.studentData}
+                        genderValue = {this.state.genderValue}
+                        changeName = {this.state.changeName}
+                        />
+                   </div>
+                )
+            }
+        });
+
+        const StudentInfoComponent = React.createClass({
+            render(){
+                const list = [];
+                const genderValue = this.props.genderValue;
+                const genderArr = ["女","男",""];
+                const changeName = this.props.changeName;
+
+                this.props.studentData.forEach((item,index) =>{
+                    if(genderValue !== "all" && changeName === ""){
+                        if(genderArr[genderValue] === item.gender){
+                            list.push(<StudentItemCompoent studentItem={item} key={index} />);
+                        }
+                        return;
+                    }
+
+                    if(changeName !== ""){
+                        if(genderValue !== "all"){
+                            if(changeName === item.stName && genderArr[genderValue] === item.gender){
+                                list.push(<StudentItemCompoent studentItem={item} key={index} />);
+                            }
+                        }else{
+                            if(changeName === item.stName){
+                                list.push(<StudentItemCompoent studentItem={item} key={index} />);
+                            }
+                        }
+                        return;
+                    }
+                    list.push(<StudentItemCompoent studentItem={item} key={index} />);
+                })
+
+                return(
+                    <div className="table-responsive">
+                       <table className="table table-bordered table-hover">
+                           <thead>
+                               <tr>
+                                   <th>姓名</th>
+                                   <th>性别</th>
+                                   <th>年龄</th>
+                                   <th>身高（cm）</th>
+                                   <th>体重（kg）</th>
+                                   <th>操作</th>
+                               </tr>
+                           </thead>
+                           <tbody id="tb">
+                               {list}
+                           </tbody>
+                       </table>
+                   </div> 
+                )
+            }
+        });
+
+        const StudentItemCompoent = React.createClass({
+            delectItem(){
+                PubSub.publish("delectItem",this.props.studentItem._id);
+            },
+            render(){
+                const item = this.props.studentItem;
+                return(
+                    <tr>
+                       <td>{item.stName}</td>
+                       <td>{item.gender}</td>
+                       <td>{item.age}</td>
+                       <td>{item.height}</td>
+                       <td>{item.weigth}</td>
+                       <td><a href="javascript:;" onClick={this.delectItem} >删除</a> </td>
+                   </tr> 
+                )
+            }
+        });
+
+        ReactDOM.render(
+            <StudentApp />,
+            document.getElementById("studentInfo")
+        )
+    </script>
+</body>
+
+</html>
