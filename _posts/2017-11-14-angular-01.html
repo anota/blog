@@ -44,9 +44,9 @@ title: AngularJs：controller,mvvm,watch,filter,module,$rootScope
     <div ng-controller="Ddd">
         <p>价格：<input type="text" ng-model="iphone.money"></p>
         <p>个数：<input type="text" ng-model="iphone.num"></p>
-        <p>费用：{{sum() | currency:'￥'}}</p>
-        <p>运费：{{iphone.fre | currency:'￥'}}</p>
-        <p>总额：{{sum() + iphone.fre | currency:'￥'}}</p>
+        <p>费用：<span ng-bind="sum() | currency:'￥'"></span></p>
+        <p>运费：<span ng-bind="iphone.fre | currency:'￥'"></span></p>
+        <p>总额：<span ng-bind="sum() + iphone.fre | currency:'￥'"></span></p>
     </div>
 
     <div ng-controller="Eee">

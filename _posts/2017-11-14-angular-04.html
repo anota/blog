@@ -52,7 +52,7 @@ title: AngularJs：orderBy,repeat-start,ng-change,ng-copy,ng-cut,ng-paste
         <!-- ng-cloak 未渲染不显示 -->
         <div ng-cloak>{{htmlText}}</div>
         <!-- 不当做变量显示 -->
-        <div ng-non-bindable="">{{text}}</div>
+        <div ng-non-bindable="" ng-bind="text"></div>
         <p>=============ng-disabled,ng-readonly,ng-checked==============</p>
         <ul>
             <li><input type="button" ng-value="text" ng-disabled="isDisabled"></li>
@@ -61,8 +61,8 @@ title: AngularJs：orderBy,repeat-start,ng-change,ng-copy,ng-cut,ng-paste
         </ul>
 
         <p>========ng-click,ng-value,ng-change,ng-paste=========</p>
-        <input type="text" ng-change="bbb='hello'" ng-model="bbb">{{bbb}}<br>
-        <input type="text" value="dfsdfdsf" ng-paste="ccc=true">{{ccc}}
+        <input type="text" ng-change="bbb='hello'" ng-model="bbb"> <span ng-bind="bbb"></span><br>
+        <input type="text" value="dfsdfdsf" ng-paste="ccc=true"><span ng-bind="ccc"></span>
         <p>===========ng-selected===========</p>
         <input type="checkbox" name="" ng-model='aaa' id="">
         <select name="" id="">
@@ -80,14 +80,14 @@ title: AngularJs：orderBy,repeat-start,ng-change,ng-copy,ng-cut,ng-paste
                 <th ng-click="fnSort('name')">姓名</th>
                 <th ng-click="fnSort('age')">年龄</th>
             </tr>
-            <tr ng-repeat="data in dataList" class="{{$even ? 'on1' : 'on2'}}">
-                <td>{{data.name}}</td>
-                <td>{{data.age}}</td>
+            <tr ng-repeat="data in dataList" ng-class="$even ? 'on1' : 'on2'">
+                <td ng-bind="data.name"></td>
+                <td ng-bind="data.age"></td>
             </tr>
         </table>
         <dl ng-repeat-start="data in dataList">
-            <dt>{{data.name}}</dt>
-            <dd>{{data.age}}</dd>
+            <dt ng-bind="data.name"></dt>
+            <dd ng-bind="data.age"></dd>
         </dl>
         <div ng-repeat-end>=============</div>
     </div>

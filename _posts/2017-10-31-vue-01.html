@@ -27,12 +27,12 @@ title: vue -> bind,class,html模板,template,render
 </head>
 
 <body>
-    <!-- bind简写v-bind -> :/{{}} -->
+    <!-- bind简写v-bind -> :/{ {}} -->
     <!-- 事件绑定简写v-on - > @ -->
     <div id="demo" :custom="abc" @click="clickHandle" class="fontSize" :class='{red:addClass}'>
-        {{message}}
         <!-- 支持一行的运算 -->
-        <span>{{true ? "anota" : "no"}}</span>
+        {{message}}
+        <span v-text="true ? 'anota' : 'no'"></span>
         <!-- 支持html -->
         <div v-html="html"></div>
     </div>

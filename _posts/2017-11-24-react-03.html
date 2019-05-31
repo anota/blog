@@ -114,7 +114,9 @@ title: React： 留言板
             return(
                 <div className="col-md-8">
                     <h3 className="reply">留言回复：</h3>
+                    {% raw %} 
                     <h2 style={{display:isNone}}>暂无留言，点击左侧添加留言！！ </h2>
+                    {% endraw %}
                     <ul className="list-group">
                         {
                             this.props.listArr.map((item,index) => <ItemComponent key={index} {...item}/>)

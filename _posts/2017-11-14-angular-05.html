@@ -29,12 +29,12 @@ title: AngularJs：ng-class,ng-style,ng-attr-xxx,ng-show,ng-if,ng-init,valid
             <div>
                 <label>用户名:</label>
                 <input type="text" name="nText" ng-model="regText.name" required ng-pattern="/^[a-zA-Z]+$/" ng-blur="change('regText',nForm.nText.$error)">
-                <span ng-repeat="re in regText.regList | filter : regText.regVal">{{re.tips}}</span>
+                <span ng-repeat="re in regText.regList | filter : regText.regVal" ng-bind="re.tips"></span>
             </div>
             <div>
                 <label>密码：</label>
                 <input type="password" name="nPassword" ng-model="regPassword.name" required ng-minlength="6" ng-blur="change('regPassword',nForm.nPassword.$error)">
-                <span ng-repeat="re in regPassword.regList | filter : regPassword.regVal">{{re.tips}}</span>
+                <span ng-repeat="re in regPassword.regList | filter : regPassword.regVal" ng-bind="re.tips"></span>
             </div>
         </form>
     </div>
@@ -43,13 +43,13 @@ title: AngularJs：ng-class,ng-style,ng-attr-xxx,ng-show,ng-if,ng-init,valid
         <p>==========validate,invalid,prisine,dirty,error================</p>
         <form novalidate name="myForm">
             <input type="text" name="myText" ng-model="text" required ng-minlength="5" ng-pattern="/^[a-zA-Z]+$/">
-            <p>valid:{{myForm.myText.$valid}}</p>
-            <p>invalid:{{myForm.myText.$invalid}}</p>
+            <p>valid:<span ng-bind="myForm.myText.$valid"></span></p>
+            <p>invalid:<span ng-bind="myForm.myText.$invalid"></span></p>
             <!-- 未修改过的 -->
-            <p>pristine:{{myForm.myText.$pristine}}</p>
+            <p>pristine:<span ng-bind="myForm.myText.$pristine"></span></p>
             <!-- 修改过的 -->
-            <p>dirty:{{myForm.myText.$dirty}}</p>
-            <p>error:{{myForm.myText.$error}}</p>
+            <p>dirty:<span ng-bind="myForm.myText.$dirty"></span></p>
+            <p>error:<span ng-bind="myForm.myText.$error"></span></p>
         </form>
     </div>
     <div ng-controller="Ccc">
@@ -63,16 +63,15 @@ title: AngularJs：ng-class,ng-style,ng-attr-xxx,ng-show,ng-if,ng-init,valid
     </div>
     <p>==========as============</p>
     <div ng-controller="FnAaa as a1">
-        <div>{{a1.text}}:{{a1.show()}}</div>
+        <div ng-bind="a1.text + ':' + a1.show() "></div>
     </div>
     <div ng-controller="Aaa">
-
         <p>=======ng-include=======</p>
         <div ng-include="'{{site.baseurl}}/tpl/1.html'"></div>
         <p>=======ng-init=========</p>
         <div ng-repeat="arrOuter in arr" ng-init="outerIndex = $index">
             <div ng-repeat="arrInner in arrOuter" ng-init="innerIndex = $index">
-                <p>{{arrInner}}:{{outerIndex}}{{innerIndex}}</p>
+                <p ng-bind="arrInner + ':' + outerIndex + innerIndex"></p>
             </div>
         </div>
         <p>=======ng-show,ng-if,ng-switch,ng-open==========</p>
