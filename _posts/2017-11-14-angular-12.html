@@ -16,19 +16,18 @@ title: AngularJs：ngResourece
     <script>
         var m1 = angular.module('myApp', ['ngRoute', 'ngResource']);
 
-        // m1.controller("Aaa", ["$scope", "$resource", ($scope, $resource) => {
-        //     const objRe = $resource(':name.:aaa', {
-        //         aaa: "json"
-        //     }, {});
-        //     console.log(ObjRe.get());
+        m1.controller("Aaa", ["$scope", "$resource", ($scope, $resource) => {
+            const objRe = $resource(':name.:aaa', {
+                aaa: "json"
+            }, {});
+            console.log(ObjRe.get());
 
+            $scope.data = objRe.get({
+                name: "lisi"
+            }, function() {}, function() {});
+        }])
 
-        //     $scope.data = objRe.get({
-        //         name: "lisi"
-        //     }, function() {}, function() {});
-        // }])
-
-
+        {% raw %}
         m1.config(["$routeProvider", $routeProvider => {
             $routeProvider.when("/aaa/:name", {
                     template: '<div>{{data[0].name}}</div><div>{{data[0].age}}</div><div>{{data[0].job}}</div>',
@@ -38,6 +37,7 @@ title: AngularJs：ngResourece
                     redirectTo: "/aaa/zhangsan"
                 });
         }]);
+        {% endraw %}
 
         m1.controller('Aaa', ['$scope', '$resource', '$location', '$routeParams', function($scope, $resource, $location, $routeParams) {
 
